@@ -1,0 +1,96 @@
+{
+    "sport": "Parachute Diving",
+    "locations": [
+      {
+        "id": 1,
+        "name": "Mysore",
+        "state": "Karnataka",
+        "coordinates": [12.2958, 76.6394],
+        "description": "One of India's best skydiving locations with scenic views of Chamundi Hills.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/mysore-parachute.jpg"
+      },
+      {
+        "id": 2,
+        "name": "Aamby Valley",
+        "state": "Maharashtra",
+        "coordinates": [18.5761, 73.4029],
+        "description": "Premium skydiving destination offering tandem jumps with spectacular views.",
+        "bestTimeToVisit": "September to April",
+        "imageUrl": "/images/locations/aamby-valley.jpg"
+      },
+      {
+        "id": 3,
+        "name": "Dhana",
+        "state": "Madhya Pradesh",
+        "coordinates": [23.7445, 78.7728],
+        "description": "A well-known drop zone for static line jumps and tandem skydiving.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/dhana.jpg"
+      },
+      {
+        "id": 4,
+        "name": "Pondicherry",
+        "state": "Puducherry",
+        "coordinates": [11.9139, 79.8145],
+        "description": "Offers stunning coastal views while parachuting from high altitudes.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/pondicherry-skydiving.jpg"
+      },
+      {
+        "id": 5,
+        "name": "Hyderabad",
+        "state": "Telangana",
+        "coordinates": [17.3850, 78.4867],
+        "description": "Ideal for first-time divers with professional skydiving training centers.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/hyderabad-skydiving.jpg"
+      },
+      {
+        "id": 6,
+        "name": "Aligarh",
+        "state": "Uttar Pradesh",
+        "coordinates": [27.8974, 78.0880],
+        "description": "Well-known for tandem skydiving and thrilling parachute jumps.",
+        "bestTimeToVisit": "September to April",
+        "imageUrl": "/images/locations/aligarh-skydiving.jpg"
+      },
+      {
+        "id": 7,
+        "name": "Deesa",
+        "state": "Gujarat",
+        "coordinates": [24.2569, 72.1815],
+        "description": "India's first certified skydiving zone with lake views.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/deesa.jpg"
+      },
+      {
+        "id": 8,
+        "name": "Bir Billing",
+        "state": "Himachal Pradesh",
+        "coordinates": [32.0451, 76.7182],
+        "description": "Primarily known for paragliding but also offers skydiving experiences.",
+        "bestTimeToVisit": "March to May, September to November",
+        "imageUrl": "/images/locations/bir-billing.jpg"
+      },
+      {
+        "id": 9,
+        "name": "Jaisalmer",
+        "state": "Rajasthan",
+        "coordinates": [26.9157, 70.9083],
+        "description": "Desert skydiving experience with panoramic views of golden dunes.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/jaisalmer.jpg"
+      },
+      {
+        "id": 10,
+        "name": "Nagpur",
+        "state": "Maharashtra",
+        "coordinates": [21.1458, 79.0882],
+        "description": "Emerging as an adventure hub with thrilling skydiving experiences.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/nagpur-skydiving.jpg"
+      }
+    ]
+  }
+  

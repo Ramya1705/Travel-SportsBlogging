@@ -1,0 +1,171 @@
+
+.post-card-premium {
+    background: #ffffff !important;
+    border-radius: 20px !important;
+    overflow: hidden !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border: 1px solid #f1f5f9 !important;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-card-premium:hover {
+    transform: translateY(-10px) !important;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* --- Image and Overlay Section --- */
+
+.card-media-wrapper {
+    position: relative;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    overflow: hidden;
+}
+
+.post-image {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.post-card-premium:hover .post-image {
+    transform: scale(1.1);
+}
+
+.overlay-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, transparent 40%, rgba(0, 0, 0, 0.1) 100%);
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.author-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.author-avatar {
+    width: 44px !important;
+    height: 44px !important;
+    border: 2px solid rgba(255, 255, 255, 0.8) !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.author-name {
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.post-timestamp {
+    font-size: 0.8rem !important;
+    font-weight: 400 !important;
+    opacity: 0.8;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* --- Card Content Section --- */
+
+.card-content-premium {
+    padding: 24px !important;
+    flex-grow: 1; /* Allows content to fill space */
+}
+
+.post-title {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 800 !important;
+    font-size: 1.3rem !important;
+    color: #1a202c !important;
+    margin-bottom: 8px !important;
+    line-height: 1.3 !important;
+    /* For multi-line truncation */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.post-tags {
+    color: #667eea !important;
+    font-weight: 600 !important;
+    font-size: 0.8rem !important;
+    margin-bottom: 16px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.post-content {
+    color: #4a5568 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+    /* For multi-line truncation */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* --- Card Actions Section --- */
+
+.card-actions-premium {
+    padding: 12px 24px !important;
+    border-top: 1px solid #f1f5f9 !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-top: auto; /* Pushes actions to the bottom */
+}
+
+.card-actions-premium .MuiBox-root {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.like-button,
+.comment-button,
+.share-button {
+    color: #94a3b8 !important;
+    transition: all 0.3s ease !important;
+}
+
+.like-button.liked {
+    color: #ef4444 !important; /* A vibrant red for liked state */
+}
+
+.like-button:hover {
+    color: #ef4444 !important;
+    background-color: rgba(239, 68, 68, 0.08) !important;
+}
+
+.comment-button:hover {
+    color: #3b82f6 !important; /* Blue for comments */
+    background-color: rgba(59, 130, 246, 0.08) !important;
+}
+
+.share-button:hover {
+    color: #667eea !important; /* Theme purple for sharing */
+    background-color: rgba(102, 126, 234, 0.08) !important;
+}
+
+.like-count {
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    color: #4a5568 !important;
+}

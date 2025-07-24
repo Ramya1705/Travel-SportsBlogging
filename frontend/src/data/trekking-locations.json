@@ -1,0 +1,96 @@
+{
+    "sport": "Trekking",
+    "locations": [
+      {
+        "id": 1,
+        "name": "Valley of Flowers",
+        "state": "Uttarakhand",
+        "coordinates": [30.4296, 79.5770],
+        "description": "A UNESCO World Heritage site known for its stunning meadows of wildflowers.",
+        "bestTimeToVisit": "June to September",
+        "imageUrl": "/images/locations/valley-of-flowers.jpg"
+      },
+      {
+        "id": 2,
+        "name": "Kedarkantha",
+        "state": "Uttarakhand",
+        "coordinates": [31.1389, 78.3527],
+        "description": "A popular winter trek that offers a breathtaking view of the snow-capped Himalayan peaks.",
+        "bestTimeToVisit": "December to April",
+        "imageUrl": "/images/locations/kedarkantha.jpg"
+      },
+      {
+        "id": 3,
+        "name": "Roopkund Lake",
+        "state": "Uttarakhand",
+        "coordinates": [30.1610, 79.7574],
+        "description": "A high-altitude trek leading to a mysterious lake surrounded by snow-covered peaks.",
+        "bestTimeToVisit": "May to October",
+        "imageUrl": "/images/locations/roopkund-lake.jpg"
+      },
+      {
+        "id": 4,
+        "name": "Chadar Trek",
+        "state": "Ladakh",
+        "coordinates": [33.0434, 78.2880],
+        "description": "A thrilling winter trek on the frozen Zanskar River, offering a unique trekking experience.",
+        "bestTimeToVisit": "January to February",
+        "imageUrl": "/images/locations/chadar-trek.jpg"
+      },
+      {
+        "id": 5,
+        "name": "Hampta Pass",
+        "state": "Himachal Pradesh",
+        "coordinates": [32.0389, 77.4417],
+        "description": "A scenic trek through lush valleys and high mountain passes.",
+        "bestTimeToVisit": "June to September",
+        "imageUrl": "/images/locations/hampta-pass.jpg"
+      },
+      {
+        "id": 6,
+        "name": "Markha Valley",
+        "state": "Ladakh",
+        "coordinates": [33.0720, 77.6759],
+        "description": "One of the most popular trekking routes in Ladakh, offering views of traditional villages and Buddhist monasteries.",
+        "bestTimeToVisit": "June to September",
+        "imageUrl": "/images/locations/markha-valley.jpg"
+      },
+      {
+        "id": 7,
+        "name": "Sikkim Singalila Ridge",
+        "state": "Sikkim",
+        "coordinates": [27.0450, 88.4433],
+        "description": "A high-altitude trek offering panoramic views of the Kanchenjunga and other peaks.",
+        "bestTimeToVisit": "April to October",
+        "imageUrl": "/images/locations/sikkim-singalila-ridge.jpg"
+      },
+      {
+        "id": 8,
+        "name": "Tadiandamol",
+        "state": "Karnataka",
+        "coordinates": [12.4231, 75.5800],
+        "description": "The highest peak in Coorg, offering a moderate trek with scenic views of coffee plantations.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/tadiandamol.jpg"
+      },
+      {
+        "id": 9,
+        "name": "Brahmatal",
+        "state": "Uttarakhand",
+        "coordinates": [30.4277, 79.6946],
+        "description": "A popular winter trek through dense forests, offering spectacular views of the Himalayan peaks.",
+        "bestTimeToVisit": "December to March",
+        "imageUrl": "/images/locations/brahmatal.jpg"
+      },
+      {
+        "id": 10,
+        "name": "Sandakphu",
+        "state": "West Bengal",
+        "coordinates": [27.3306, 88.1107],
+        "description": "The highest point in West Bengal, offering incredible views of Mount Everest, Kanchenjunga, and other peaks.",
+        "bestTimeToVisit": "April to May, September to December",
+        "imageUrl": "/images/locations/sandakphu.jpg"
+      }
+    ]
+  }
+  

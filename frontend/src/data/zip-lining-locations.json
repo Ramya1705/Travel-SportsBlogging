@@ -1,0 +1,96 @@
+{
+    "sport": "Zip Lining",
+    "locations": [
+      {
+        "id": 1,
+        "name": "Rishikesh",
+        "state": "Uttarakhand",
+        "coordinates": [30.0920, 78.2676],
+        "description": "Experience zip lining above the Ganges with beautiful views of the surrounding hills.",
+        "bestTimeToVisit": "September to June",
+        "imageUrl": "/images/locations/rishikesh-ziplining.jpg"
+      },
+      {
+        "id": 2,
+        "name": "Mahabalipuram",
+        "state": "Tamil Nadu",
+        "coordinates": [12.6193, 80.1811],
+        "description": "Zip line across the beautiful coastal views near the UNESCO World Heritage sites.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/mahabalipuram-ziplining.jpg"
+      },
+      {
+        "id": 3,
+        "name": "Wayanad",
+        "state": "Kerala",
+        "coordinates": [11.6813, 76.0780],
+        "description": "Experience zip lining through the lush greenery and scenic hills.",
+        "bestTimeToVisit": "October to May",
+        "imageUrl": "/images/locations/wayanad-ziplining.jpg"
+      },
+      {
+        "id": 4,
+        "name": "Nainital",
+        "state": "Uttarakhand",
+        "coordinates": [29.3800, 79.4455],
+        "description": "A thrilling zip-lining experience above the stunning Naini Lake and surrounding forests.",
+        "bestTimeToVisit": "March to June",
+        "imageUrl": "/images/locations/nainital-ziplining.jpg"
+      },
+      {
+        "id": 5,
+        "name": "Kuala Lumpur",
+        "state": "Malaysia",
+        "coordinates": [3.1390, 101.6869],
+        "description": "For international travelers, zip lining across the iconic KL skyline.",
+        "bestTimeToVisit": "All year round",
+        "imageUrl": "/images/locations/kuala-lumpur-ziplining.jpg"
+      },
+      {
+        "id": 6,
+        "name": "Agra",
+        "state": "Uttar Pradesh",
+        "coordinates": [27.1767, 78.0081],
+        "description": "Experience zip lining with a unique view of the Taj Mahal in the background.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/agra-ziplining.jpg"
+      },
+      {
+        "id": 7,
+        "name": "Shimla",
+        "state": "Himachal Pradesh",
+        "coordinates": [31.1048, 77.1705],
+        "description": "Experience the thrill of zip lining in the hills and valleys of Shimla.",
+        "bestTimeToVisit": "March to June",
+        "imageUrl": "/images/locations/shimla-ziplining.jpg"
+      },
+      {
+        "id": 8,
+        "name": "Kodaikanal",
+        "state": "Tamil Nadu",
+        "coordinates": [10.2390, 77.5881],
+        "description": "Zip line across breathtaking views of the Western Ghats and misty mountains.",
+        "bestTimeToVisit": "April to June, September to December",
+        "imageUrl": "/images/locations/kodaikanal-ziplining.jpg"
+      },
+      {
+        "id": 9,
+        "name": "Goa",
+        "state": "Goa",
+        "coordinates": [15.2993, 74.1240],
+        "description": "Zip line above the lush green landscapes and beaches of Goa.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/goa-ziplining.jpg"
+      },
+      {
+        "id": 10,
+        "name": "Pondicherry",
+        "state": "Puducherry",
+        "coordinates": [11.9416, 79.8083],
+        "description": "Enjoy a zip line experience with beautiful views of the coastal town.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/pondicherry-ziplining.jpg"
+      }
+    ]
+  }
+  

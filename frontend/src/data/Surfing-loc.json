@@ -1,0 +1,96 @@
+{
+    "sport": "Surfing",
+    "locations": [
+      {
+        "id": 1,
+        "name": "Varkala Beach",
+        "state": "Kerala",
+        "coordinates": [8.7360, 76.7030],
+        "description": "Known for its consistent waves and beautiful setting.",
+        "bestTimeToVisit": "September to March",
+        "imageUrl": "/images/locations/varkala-beach.jpg"
+      },
+      {
+        "id": 2,
+        "name": "Palolem Beach",
+        "state": "Goa",
+        "coordinates": [15.0000, 74.1000],
+        "description": "Perfect for beginner surfers and known for its relaxed atmosphere.",
+        "bestTimeToVisit": "October to May",
+        "imageUrl": "/images/locations/palolem-beach.jpg"
+      },
+      {
+        "id": 3,
+        "name": "Ashtamudi Lake",
+        "state": "Kerala",
+        "coordinates": [8.7714, 76.5984],
+        "description": "Ideal for surfing and exploring the scenic beauty of the backwaters.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/ashtamudi-lake.jpg"
+      },
+      {
+        "id": 4,
+        "name": "Kovalam Beach",
+        "state": "Kerala",
+        "coordinates": [8.4022, 76.9964],
+        "description": "One of India's best surfing spots with gentle waves.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/kovalam-beach.jpg"
+      },
+      {
+        "id": 5,
+        "name": "Manapad Beach",
+        "state": "Tamil Nadu",
+        "coordinates": [8.4202, 78.1349],
+        "description": "Renowned for its clear waters and great surfing waves.",
+        "bestTimeToVisit": "September to May",
+        "imageUrl": "/images/locations/manapad-beach.jpg"
+      },
+      {
+        "id": 6,
+        "name": "Arambol Beach",
+        "state": "Goa",
+        "coordinates": [15.5470, 73.7450],
+        "description": "A peaceful surf destination with welcoming waves for all skill levels.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/arambol-beach.jpg"
+      },
+      {
+        "id": 7,
+        "name": "Coco Beach",
+        "state": "Goa",
+        "coordinates": [15.5330, 73.7965],
+        "description": "A great surfing destination with perfect wave conditions.",
+        "bestTimeToVisit": "November to April",
+        "imageUrl": "/images/locations/coco-beach.jpg"
+      },
+      {
+        "id": 8,
+        "name": "Dhanushkodi Beach",
+        "state": "Tamil Nadu",
+        "coordinates": [9.2795, 79.2404],
+        "description": "Popular for consistent waves and tranquil surroundings.",
+        "bestTimeToVisit": "November to February",
+        "imageUrl": "/images/locations/dhanushkodi-beach.jpg"
+      },
+      {
+        "id": 9,
+        "name": "Gokarna",
+        "state": "Karnataka",
+        "coordinates": [14.5544, 74.3085],
+        "description": "Known for its pristine beaches and excellent surfing conditions.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/gokarna.jpg"
+      },
+      {
+        "id": 10,
+        "name": "Miramar Beach",
+        "state": "Goa",
+        "coordinates": [15.4970, 73.8164],
+        "description": "A popular destination for surfers looking for both fun and adventure.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/miramar-beach.jpg"
+      }
+    ]
+  }
+  

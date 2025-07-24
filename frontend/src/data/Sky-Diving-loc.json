@@ -1,0 +1,96 @@
+{
+    "sport": "Sky Diving",
+    "locations": [
+      {
+        "id": 1,
+        "name": "Arambol Beach",
+        "state": "Goa",
+        "coordinates": [15.5470, 73.7450],
+        "description": "Known for its thrilling skydiving experience with scenic views of the Arabian Sea.",
+        "bestTimeToVisit": "October to April",
+        "imageUrl": "/images/locations/arambol-beach.jpg"
+      },
+      {
+        "id": 2,
+        "name": "Bangalore",
+        "state": "Karnataka",
+        "coordinates": [12.9716, 77.5946],
+        "description": "Famous for its aerial views of the city and surrounding countryside.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/bangalore.jpg"
+      },
+      {
+        "id": 3,
+        "name": "Pondicherry",
+        "state": "Puducherry",
+        "coordinates": [11.9416, 79.8083],
+        "description": "Enjoy skydiving with spectacular coastal views.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/pondicherry.jpg"
+      },
+      {
+        "id": 4,
+        "name": "Kullu Valley",
+        "state": "Himachal Pradesh",
+        "coordinates": [32.0125, 77.0975],
+        "description": "Skydiving amidst the stunning snow-capped mountains and valleys.",
+        "bestTimeToVisit": "March to May",
+        "imageUrl": "/images/locations/kullu-valley.jpg"
+      },
+      {
+        "id": 5,
+        "name": "Nashik",
+        "state": "Maharashtra",
+        "coordinates": [19.9975, 73.7908],
+        "description": "A place to enjoy an aerial view of the vineyards and surrounding hills.",
+        "bestTimeToVisit": "October to April",
+        "imageUrl": "/images/locations/nashik.jpg"
+      },
+      {
+        "id": 6,
+        "name": "Rishikesh",
+        "state": "Uttarakhand",
+        "coordinates": [30.0920, 78.2676],
+        "description": "Known for adventure activities, including the thrilling skydiving experience over the Ganges.",
+        "bestTimeToVisit": "March to June",
+        "imageUrl": "/images/locations/rishikesh.jpg"
+      },
+      {
+        "id": 7,
+        "name": "Delhi",
+        "state": "Delhi",
+        "coordinates": [28.6139, 77.2090],
+        "description": "A great location for an urban skydiving experience over the capital city.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/delhi.jpg"
+      },
+      {
+        "id": 8,
+        "name": "Dhana, Madhya Pradesh",
+        "state": "Madhya Pradesh",
+        "coordinates": [23.9890, 77.7223],
+        "description": "An offbeat destination for skydiving with panoramic views of the surrounding landscape.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/dhana-madhya-pradesh.jpg"
+      },
+      {
+        "id": 9,
+        "name": "Bhopal",
+        "state": "Madhya Pradesh",
+        "coordinates": [23.2599, 77.4126],
+        "description": "A thrilling skydiving experience above the city of lakes.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/bhopal.jpg"
+      },
+      {
+        "id": 10,
+        "name": "Jaipur",
+        "state": "Rajasthan",
+        "coordinates": [26.9124, 75.7873],
+        "description": "Enjoy skydiving with an aerial view of the beautiful Pink City.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/jaipur.jpg"
+      }
+    ]
+  }
+  

@@ -1,0 +1,96 @@
+{
+    "sport": "Kite Landboarding",
+    "locations": [
+      {
+        "id": 1,
+        "name": "Rishikesh",
+        "state": "Uttarakhand",
+        "coordinates": [30.0920, 78.2676],
+        "description": "Rishikesh is not just for rafting, it's also great for kite landboarding with its smooth terrain and strong winds.",
+        "bestTimeToVisit": "September to June",
+        "imageUrl": "/images/locations/rishikesh-kite-landboarding.jpg"
+      },
+      {
+        "id": 2,
+        "name": "Jodhpur",
+        "state": "Rajasthan",
+        "coordinates": [26.2389, 73.0243],
+        "description": "Jodhpur's open spaces and strong winds make it a perfect spot for kite landboarding, with stunning desert landscapes.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/jodhpur-kite-landboarding.jpg"
+      },
+      {
+        "id": 3,
+        "name": "Goa",
+        "state": "Goa",
+        "coordinates": [15.2993, 74.1240],
+        "description": "Goa offers the perfect conditions for kite landboarding with its coastal winds and open beaches.",
+        "bestTimeToVisit": "November to March",
+        "imageUrl": "/images/locations/goa-kite-landboarding.jpg"
+      },
+      {
+        "id": 4,
+        "name": "Pondicherry",
+        "state": "Puducherry",
+        "coordinates": [11.9416, 79.8083],
+        "description": "The coastal town of Pondicherry provides strong winds ideal for kite landboarding along its sandy shores.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/pondicherry-kite-landboarding.jpg"
+      },
+      {
+        "id": 5,
+        "name": "Kutch",
+        "state": "Gujarat",
+        "coordinates": [23.7275, 69.9239],
+        "description": "Kutch offers a vast expanse of land with favorable winds for kite landboarding, surrounded by the salt flats.",
+        "bestTimeToVisit": "November to March",
+        "imageUrl": "/images/locations/kutch-kite-landboarding.jpg"
+      },
+      {
+        "id": 6,
+        "name": "Kovalam",
+        "state": "Kerala",
+        "coordinates": [8.4020, 76.9950],
+        "description": "Kovalam's beaches provide ideal conditions for kite landboarding with gentle winds and smooth sand.",
+        "bestTimeToVisit": "November to March",
+        "imageUrl": "/images/locations/kovalam-kite-landboarding.jpg"
+      },
+      {
+        "id": 7,
+        "name": "Varkala",
+        "state": "Kerala",
+        "coordinates": [8.7294, 76.7072],
+        "description": "Varkala offers perfect conditions for kite landboarding with its beautiful beach and favorable winds.",
+        "bestTimeToVisit": "November to March",
+        "imageUrl": "/images/locations/varkala-kite-landboarding.jpg"
+      },
+      {
+        "id": 8,
+        "name": "Gokarna",
+        "state": "Karnataka",
+        "coordinates": [14.5544, 74.3114],
+        "description": "Gokarna offers scenic beaches and good winds for kite landboarding, perfect for adventure enthusiasts.",
+        "bestTimeToVisit": "November to March",
+        "imageUrl": "/images/locations/gokarna-kite-landboarding.jpg"
+      },
+      {
+        "id": 9,
+        "name": "Chandipur",
+        "state": "Odisha",
+        "coordinates": [21.4525, 87.4125],
+        "description": "Chandipur's long stretch of beach and steady winds make it a fantastic location for kite landboarding.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/chandipur-kite-landboarding.jpg"
+      },
+      {
+        "id": 10,
+        "name": "Mandvi Beach",
+        "state": "Gujarat",
+        "coordinates": [22.7581, 69.8634],
+        "description": "Mandvi offers smooth sandy beaches and ideal wind conditions for kite landboarding, set in a peaceful environment.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/mandvi-beach-kite-landboarding.jpg"
+      }
+    ]
+  }
+  

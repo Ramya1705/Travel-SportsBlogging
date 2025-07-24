@@ -1,0 +1,96 @@
+{
+"sport": "Dune bashing",
+"locations":[
+
+    {
+        "id": 1,
+        "name": "Thar Desert",
+        "state": "Rajasthan",
+        "coordinates": [27.3500, 70.2191],
+        "description": "A popular desert for dune bashing, especially near Jaisalmer, with beautiful dunes and rich history.",
+        "bestTimeToVisit": "November to March",
+        "imageUrl": "/images/locations/thar-desert.jpg"
+    },
+    {
+        "id": 2,
+        "name": "Rann of Kutch",
+        "state": "Gujarat",
+        "coordinates": [23.5167, 69.6983],
+        "description": "The salt marsh desert offers a unique dune bashing experience, particularly during the Rann Utsav festival.",
+        "bestTimeToVisit": "November to February",
+        "imageUrl": "/images/locations/rann-of-kutch.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Sam Sand Dunes",
+        "state": "Rajasthan",
+        "coordinates": [26.0955, 70.7940],
+        "description": "Famous for its large sand dunes, Sam Sand Dunes near Jaisalmer offers an exciting dune bashing adventure.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/sam-sand-dunes.jpg"
+    },
+    {
+        "id": 4,
+        "name": "Ladakh Desert",
+        "state": "Ladakh",
+        "coordinates": [34.1567, 77.5785],
+        "description": "Known for its high-altitude desert terrain, Ladakh offers thrilling dune bashing with breathtaking views.",
+        "bestTimeToVisit": "June to September",
+        "imageUrl": "/images/locations/ladakh-desert.jpg"
+    },
+    {
+        "id": 5,
+        "name": "Nubra Valley",
+        "state": "Ladakh",
+        "coordinates": [34.55, 76.1500],
+        "description": "Located in Ladakh, Nubra Valley offers an exciting dune bashing experience amidst towering dunes and spectacular landscapes.",
+        "bestTimeToVisit": "June to September",
+        "imageUrl": "/images/locations/nubra-valley.jpg"
+    },
+    {
+        "id": 6,
+        "name": "Kutch Desert",
+        "state": "Gujarat",
+        "coordinates": [23.5253, 69.9869],
+        "description": "Offering scenic views, Kutch Desert is ideal for off-roading and dune bashing, especially during the winter months.",
+        "bestTimeToVisit": "November to February",
+        "imageUrl": "/images/locations/kutch-desert.jpg"
+    },
+    {
+        "id": 7,
+        "name": "Jaisalmer Desert",
+        "state": "Rajasthan",
+        "coordinates": [26.9157, 70.9110],
+        "description": "Known for its golden sands and vast desert terrain, Jaisalmer offers thrilling dune bashing tours.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/jaisalmer-desert.jpg"
+    },
+    {
+        "id": 8,
+        "name": "Bikaner Desert",
+        "state": "Rajasthan",
+        "coordinates": [28.0339, 73.3110],
+        "description": "Bikaner is known for its vast dunes and is a lesser-known but amazing spot for dune bashing.",
+        "bestTimeToVisit": "November to March",
+        "imageUrl": "/images/locations/bikaner-desert.jpg"
+    },
+    {
+        "id": 9,
+        "name": "Madhya Pradesh Desert",
+        "state": "Madhya Pradesh",
+        "coordinates": [23.1234, 78.3000],
+        "description": "Madhya Pradesh offers unique desert experiences, perfect for off-roading and dune bashing during the dry season.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/mp-desert.jpg"
+    },
+    {
+        "id": 10,
+        "name": "Desert National Park",
+        "state": "Rajasthan",
+        "coordinates": [26.8123, 70.8912],
+        "description": "Located near Jaisalmer, this national park offers not only dune bashing but also a rich diversity of wildlife.",
+        "bestTimeToVisit": "November to March",
+        "imageUrl": "/images/locations/desert-national-park.jpg"
+    }
+]
+}

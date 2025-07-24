@@ -1,0 +1,95 @@
+{
+    "sport": "Boating",
+    "locations": [
+      {
+        "id": 1,
+        "name": "Dal Lake, Srinagar",
+        "state": "Jammu and Kashmir",
+        "coordinates": [34.0837, 74.7973],
+        "description": "Famous for its shikara rides and houseboats, Dal Lake is one of the most iconic boating destinations in India.",
+        "bestTimeToVisit": "April to October",
+        "imageUrl": "/images/locations/dal-lake.jpg"
+      },
+      {
+        "id": 2,
+        "name": "Chilika Lake, Odisha",
+        "state": "Odisha",
+        "coordinates": [19.6981, 85.3518],
+        "description": "Asia's largest brackish water lagoon, perfect for boating while spotting Irrawaddy dolphins and migratory birds.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/chilika-lake.jpg"
+      },
+      {
+        "id": 3,
+        "name": "Hussain Sagar Lake, Hyderabad",
+        "state": "Telangana",
+        "coordinates": [17.4239, 78.4738],
+        "description": "This heart-shaped lake offers boat rides with views of the iconic Buddha statue in the center.",
+        "bestTimeToVisit": "September to March",
+        "imageUrl": "/images/locations/hussain-sagar.jpg"
+      },
+      {
+        "id": 4,
+        "name": "Vembanad Lake, Kerala",
+        "state": "Kerala",
+        "coordinates": [9.5697, 76.3869],
+        "description": "The longest lake in India and part of Kerala's famous backwaters, perfect for houseboat cruises.",
+        "bestTimeToVisit": "September to March",
+        "imageUrl": "/images/locations/vembanad-lake.jpg"
+      },
+      {
+        "id": 5,
+        "name": "Naini Lake, Nainital",
+        "state": "Uttarakhand",
+        "coordinates": [29.3919, 79.4542],
+        "description": "A picturesque lake in the Kumaon foothills offering rowboats, paddle boats, and yacht rides.",
+        "bestTimeToVisit": "March to June",
+        "imageUrl": "/images/locations/naini-lake.jpg"
+      },
+          {
+            "id": 6,
+            "name": "Loktak Lake, Manipur",
+            "state": "Manipur",
+            "coordinates": [24.5623, 93.7876],
+            "description": "Known for its floating phumdis (islands), Loktak Lake is a mesmerizing boating destination in Northeast India.",
+            "bestTimeToVisit": "October to March",
+            "imageUrl": "/images/locations/loktak-lake.jpg"
+          },
+          {
+            "id": 7,
+            "name": "Sukhna Lake, Chandigarh",
+            "state": "Chandigarh",
+            "coordinates": [30.7421, 76.8188],
+            "description": "A man-made lake at the foothills of the Himalayas, perfect for pedal boating and scenic evening rides.",
+            "bestTimeToVisit": "September to April",
+            "imageUrl": "/images/locations/sukhna-lake.jpg"
+          },
+          {
+            "id": 8,
+            "name": "Bhavani Island, Andhra Pradesh",
+            "state": "Andhra Pradesh",
+            "coordinates": [16.5062, 80.6185],
+            "description": "Located in the Krishna River, Bhavani Island offers speed boating, jet skiing, and houseboat experiences.",
+            "bestTimeToVisit": "October to March",
+            "imageUrl": "/images/locations/bhavani-island.jpg"
+          },
+          {
+            "id": 9,
+            "name": "Pichola Lake, Udaipur",
+            "state": "Rajasthan",
+            "coordinates": [24.5780, 73.6822],
+            "description": "A historic lake known for its romantic boat rides with views of City Palace and the Lake Palace.",
+            "bestTimeToVisit": "September to March",
+            "imageUrl": "/images/locations/pichola-lake.jpg"
+          },
+          {
+            "id": 10,
+            "name": "Tehri Lake, Uttarakhand",
+            "state": "Uttarakhand",
+            "coordinates": [30.3753, 78.4803],
+            "description": "A massive artificial reservoir offering adventure boating, jet skiing, and water sports in the Himalayas.",
+            "bestTimeToVisit": "March to June",
+            "imageUrl": "/images/locations/tehri-lake.jpg"
+          }
+    ]
+  }

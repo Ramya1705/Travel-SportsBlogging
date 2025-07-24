@@ -1,0 +1,96 @@
+{
+    "sport": "Mountain Climbing",
+    "locations": [
+      {
+        "id": 1,
+        "name": "Mount Everest Base Camp",
+        "state": "Nepal",
+        "coordinates": [27.9881, 86.9250],
+        "description": "A challenging yet rewarding climb leading to the base camp of the world's highest peak.",
+        "bestTimeToVisit": "April to May, September to November",
+        "imageUrl": "/images/locations/everest-basecamp.jpg"
+      },
+      {
+        "id": 2,
+        "name": "Kanchenjunga",
+        "state": "Sikkim",
+        "coordinates": [27.7025, 88.1475],
+        "description": "The third-highest mountain in the world, offering a remote and technical climb.",
+        "bestTimeToVisit": "April to May, September to October",
+        "imageUrl": "/images/locations/kanchenjunga.jpg"
+      },
+      {
+        "id": 3,
+        "name": "Nanda Devi",
+        "state": "Uttarakhand",
+        "coordinates": [30.3752, 79.9697],
+        "description": "India's second-highest peak with stunning landscapes and challenging routes.",
+        "bestTimeToVisit": "May to June, September to October",
+        "imageUrl": "/images/locations/nanda-devi.jpg"
+      },
+      {
+        "id": 4,
+        "name": "Stok Kangri",
+        "state": "Ladakh",
+        "coordinates": [33.9996, 77.4889],
+        "description": "A popular peak for trekkers and climbers seeking high-altitude adventure.",
+        "bestTimeToVisit": "June to September",
+        "imageUrl": "/images/locations/stok-kangri.jpg"
+      },
+      {
+        "id": 5,
+        "name": "Annapurna",
+        "state": "Nepal",
+        "coordinates": [28.5961, 83.8203],
+        "description": "One of the deadliest and most technical climbs in the world.",
+        "bestTimeToVisit": "April to May, September to November",
+        "imageUrl": "/images/locations/annapurna.jpg"
+      },
+      {
+        "id": 6,
+        "name": "Bhagirathi Peaks",
+        "state": "Uttarakhand",
+        "coordinates": [30.8642, 79.1035],
+        "description": "A trio of peaks that offer technical rock and ice climbing challenges.",
+        "bestTimeToVisit": "May to June, September to October",
+        "imageUrl": "/images/locations/bhagirathi.jpg"
+      },
+      {
+        "id": 7,
+        "name": "Kedarnath Dome",
+        "state": "Uttarakhand",
+        "coordinates": [30.7353, 79.0666],
+        "description": "A prominent Himalayan peak with moderate to difficult climbing routes.",
+        "bestTimeToVisit": "May to October",
+        "imageUrl": "/images/locations/kedarnath-dome.jpg"
+      },
+      {
+        "id": 8,
+        "name": "Friendship Peak",
+        "state": "Himachal Pradesh",
+        "coordinates": [32.2961, 77.1591],
+        "description": "A great peak for beginner mountaineers with stunning panoramic views.",
+        "bestTimeToVisit": "June to September",
+        "imageUrl": "/images/locations/friendship-peak.jpg"
+      },
+      {
+        "id": 9,
+        "name": "Trishul",
+        "state": "Uttarakhand",
+        "coordinates": [30.3047, 79.7705],
+        "description": "A three-peak massif offering a rewarding but technical climb.",
+        "bestTimeToVisit": "April to June, September to October",
+        "imageUrl": "/images/locations/trishul.jpg"
+      },
+      {
+        "id": 10,
+        "name": "Chamser Kangri",
+        "state": "Ladakh",
+        "coordinates": [33.4641, 78.7233],
+        "description": "A high-altitude climb in Ladakh with breathtaking views of Pangong Lake.",
+        "bestTimeToVisit": "June to September",
+        "imageUrl": "/images/locations/chamser-kangri.jpg"
+      }
+    ]
+  }
+  
