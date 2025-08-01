@@ -1,0 +1,96 @@
+{
+    "sport": "Caving",
+    "locations": [
+      {
+        "id": 1,
+        "name": "Meghalaya Caves",
+        "state": "Meghalaya",
+        "coordinates": [25.4670, 91.3662],
+        "description": "Home to the longest caves in India, including Mawsmai and Siju caves.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/meghalaya-caves.jpg"
+      },
+      {
+        "id": 2,
+        "name": "Elephanta Caves",
+        "state": "Maharashtra",
+        "coordinates": [18.9633, 72.9311],
+        "description": "UNESCO World Heritage site with rock-cut caves dedicated to Lord Shiva.",
+        "bestTimeToVisit": "November to February",
+        "imageUrl": "/images/locations/elephanta-caves.jpg"
+      },
+      {
+        "id": 3,
+        "name": "Ajanta Caves",
+        "state": "Maharashtra",
+        "coordinates": [20.5519, 75.7033],
+        "description": "Ancient Buddhist cave temples known for stunning frescoes and carvings.",
+        "bestTimeToVisit": "November to February",
+        "imageUrl": "/images/locations/ajanta-caves.jpg"
+      },
+      {
+        "id": 4,
+        "name": "Badami Caves",
+        "state": "Karnataka",
+        "coordinates": [15.9149, 75.8206],
+        "description": "Famous for Hindu and Jain rock-cut temples carved in sandstone.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/badami-caves.jpg"
+      },
+      {
+        "id": 5,
+        "name": "Belum Caves",
+        "state": "Andhra Pradesh",
+        "coordinates": [15.0993, 78.1205],
+        "description": "The second longest cave system in India, known for stalactites and stalagmites.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/belum-caves.jpg"
+      },
+      {
+        "id": 6,
+        "name": "Borra Caves",
+        "state": "Andhra Pradesh",
+        "coordinates": [18.2833, 83.0500],
+        "description": "Beautiful limestone caves with natural formations, located in the Araku Valley.",
+        "bestTimeToVisit": "November to February",
+        "imageUrl": "/images/locations/borra-caves.jpg"
+      },
+      {
+        "id": 7,
+        "name": "Krem Liat Prah",
+        "state": "Meghalaya",
+        "coordinates": [25.3333, 92.6000],
+        "description": "The longest natural cave in India with unique limestone formations.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/krem-liat-prah.jpg"
+      },
+      {
+        "id": 8,
+        "name": "Edakkal Caves",
+        "state": "Kerala",
+        "coordinates": [11.6146, 76.2361],
+        "description": "Prehistoric caves with petroglyphs dating back to the Neolithic Age.",
+        "bestTimeToVisit": "October to May",
+        "imageUrl": "/images/locations/edakkal-caves.jpg"
+      },
+      {
+        "id": 9,
+        "name": "Krem Mawmluh",
+        "state": "Meghalaya",
+        "coordinates": [25.3000, 91.7000],
+        "description": "A unique cave known for its underground river and rock formations.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/krem-mawmluh.jpg"
+      },
+      {
+        "id": 10,
+        "name": "Pandav Caves",
+        "state": "Madhya Pradesh",
+        "coordinates": [22.4289, 78.7138],
+        "description": "Mythologically significant caves associated with the Pandavas from Mahabharata.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/pandav-caves.jpg"
+      }
+    ]
+  }
+  

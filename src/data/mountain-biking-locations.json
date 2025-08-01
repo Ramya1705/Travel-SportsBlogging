@@ -1,0 +1,96 @@
+{
+    "sport": "Mountain Biking",
+    "locations": [
+      {
+        "id": 1,
+        "name": "Manali to Leh",
+        "state": "Himachal Pradesh to Ladakh",
+        "coordinates": [32.2396, 77.1792],
+        "description": "One of the most popular mountain biking routes in India, offering a challenging and scenic ride through the Himalayan terrain.",
+        "bestTimeToVisit": "June to September",
+        "imageUrl": "/images/locations/manali-to-leh-mountain-biking.jpg"
+      },
+      {
+        "id": 2,
+        "name": "Spiti Valley",
+        "state": "Himachal Pradesh",
+        "coordinates": [32.0857, 77.6925],
+        "description": "A remote and rugged biking route through barren landscapes and high-altitude mountains.",
+        "bestTimeToVisit": "June to September",
+        "imageUrl": "/images/locations/spiti-valley-mountain-biking.jpg"
+      },
+      {
+        "id": 3,
+        "name": "Coorg",
+        "state": "Karnataka",
+        "coordinates": [12.3385, 75.8058],
+        "description": "Mountain biking through coffee plantations, hilly terrain, and lush forests, offering stunning views of the Western Ghats.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/coorg-mountain-biking.jpg"
+      },
+      {
+        "id": 4,
+        "name": "Nainital",
+        "state": "Uttarakhand",
+        "coordinates": [29.3800, 79.4455],
+        "description": "A beautiful cycling route through the hilly terrains and lakeside roads of Nainital.",
+        "bestTimeToVisit": "March to June",
+        "imageUrl": "/images/locations/nainital-mountain-biking.jpg"
+      },
+      {
+        "id": 5,
+        "name": "Ladakh",
+        "state": "Ladakh",
+        "coordinates": [34.1526, 77.5783],
+        "description": "Mountain biking through the challenging high-altitude terrain of Ladakh, featuring rugged trails and breathtaking views of the mountains.",
+        "bestTimeToVisit": "June to September",
+        "imageUrl": "/images/locations/ladakh-mountain-biking.jpg"
+      },
+      {
+        "id": 6,
+        "name": "Mysore",
+        "state": "Karnataka",
+        "coordinates": [12.2958, 76.6394],
+        "description": "A thrilling mountain biking experience through the hills and forests around Mysore.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/mysore-mountain-biking.jpg"
+      },
+      {
+        "id": 7,
+        "name": "Rishikesh",
+        "state": "Uttarakhand",
+        "coordinates": [30.0920, 78.2676],
+        "description": "Mountain biking along the picturesque trails in Rishikesh, amidst the beautiful landscapes of the Himalayas.",
+        "bestTimeToVisit": "September to June",
+        "imageUrl": "/images/locations/rishikesh-mountain-biking.jpg"
+      },
+      {
+        "id": 8,
+        "name": "Kullu Valley",
+        "state": "Himachal Pradesh",
+        "coordinates": [32.0487, 77.0935],
+        "description": "Biking through the lush valleys and forests of Kullu, offering challenging trails and panoramic views of the surrounding mountains.",
+        "bestTimeToVisit": "March to June, September to November",
+        "imageUrl": "/images/locations/kullu-valley-mountain-biking.jpg"
+      },
+      {
+        "id": 9,
+        "name": "Tirthan Valley",
+        "state": "Himachal Pradesh",
+        "coordinates": [32.0852, 77.5927],
+        "description": "Mountain biking through the serene Tirthan Valley, with its remote trails, dense forests, and beautiful landscapes.",
+        "bestTimeToVisit": "March to June, September to November",
+        "imageUrl": "/images/locations/tirthan-valley-mountain-biking.jpg"
+      },
+      {
+        "id": 10,
+        "name": "Ziro Valley",
+        "state": "Arunachal Pradesh",
+        "coordinates": [27.5935, 93.8289],
+        "description": "Mountain biking in Ziro Valley, known for its green paddy fields, Apatani tribal culture, and scenic trails.",
+        "bestTimeToVisit": "October to April",
+        "imageUrl": "/images/locations/ziro-valley-mountain-biking.jpg"
+      }
+    ]
+  }
+  

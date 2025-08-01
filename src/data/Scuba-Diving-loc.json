@@ -1,0 +1,96 @@
+{
+    "sport": "Scuba Diving",
+    "locations": [
+      {
+        "id": 1,
+        "name": "Andaman Islands",
+        "state": "Andaman and Nicobar Islands",
+        "coordinates": [11.7401, 92.6586],
+        "description": "Famous for vibrant coral reefs and abundant marine life.",
+        "bestTimeToVisit": "November to April",
+        "imageUrl": "/images/locations/andaman-islands.jpg"
+      },
+      {
+        "id": 2,
+        "name": "Goa",
+        "state": "Goa",
+        "coordinates": [15.2993, 74.1240],
+        "description": "Popular for its beautiful dive sites like Grande Island and Netrani.",
+        "bestTimeToVisit": "October to May",
+        "imageUrl": "/images/locations/goa.jpg"
+      },
+      {
+        "id": 3,
+        "name": "Lakshadweep",
+        "state": "Lakshadweep",
+        "coordinates": [10.2828, 72.6342],
+        "description": "Home to some of India's best coral reefs and clear waters.",
+        "bestTimeToVisit": "October to May",
+        "imageUrl": "/images/locations/lakshadweep.jpg"
+      },
+      {
+        "id": 4,
+        "name": "Netrani Island",
+        "state": "Karnataka",
+        "coordinates": [13.7582, 74.3672],
+        "description": "Known as the 'Pigeon Island' for its diverse marine life.",
+        "bestTimeToVisit": "October to May",
+        "imageUrl": "/images/locations/netrani-island.jpg"
+      },
+      {
+        "id": 5,
+        "name": "Tarkarli",
+        "state": "Maharashtra",
+        "coordinates": [16.0174, 73.5215],
+        "description": "A serene beach perfect for scuba diving with clear waters.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/tarkarli.jpg"
+      },
+      {
+        "id": 6,
+        "name": "Havelock Island",
+        "state": "Andaman and Nicobar Islands",
+        "coordinates": [12.0000, 92.9360],
+        "description": "Offers some of the most beautiful underwater experiences.",
+        "bestTimeToVisit": "November to April",
+        "imageUrl": "/images/locations/havelock-island.jpg"
+      },
+      {
+        "id": 7,
+        "name": "Kovalam",
+        "state": "Kerala",
+        "coordinates": [8.4022, 76.9964],
+        "description": "Known for its pristine beaches and crystal-clear waters.",
+        "bestTimeToVisit": "November to April",
+        "imageUrl": "/images/locations/kovalam.jpg"
+      },
+      {
+        "id": 8,
+        "name": "Pondicherry",
+        "state": "Puducherry",
+        "coordinates": [11.9416, 79.8083],
+        "description": "Popular for its rich marine life and diving sites.",
+        "bestTimeToVisit": "November to February",
+        "imageUrl": "/images/locations/pondicherry.jpg"
+      },
+      {
+        "id": 9,
+        "name": "Alleppey",
+        "state": "Kerala",
+        "coordinates": [9.5000, 76.3333],
+        "description": "Known for its tranquil backwaters and scuba diving opportunities.",
+        "bestTimeToVisit": "October to May",
+        "imageUrl": "/images/locations/alleppey.jpg"
+      },
+      {
+        "id": 10,
+        "name": "Diu",
+        "state": "Daman and Diu",
+        "coordinates": [20.7175, 70.9192],
+        "description": "A calm and peaceful destination offering excellent diving spots.",
+        "bestTimeToVisit": "October to May",
+        "imageUrl": "/images/locations/diu.jpg"
+      }
+    ]
+  }
+  

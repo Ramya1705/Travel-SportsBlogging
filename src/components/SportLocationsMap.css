@@ -1,0 +1,64 @@
+.map-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .location-details {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .location-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+  
+  .view-details-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .view-details-btn:hover {
+    background-color: #2980b9;
+  }
+  
+  /* Ensure the popup is styled nicely */
+  .leaflet-popup-content {
+    min-width: 200px;
+  }
+  
+  .leaflet-popup-content h3 {
+    margin-top: 0;
+    color: #333;
+  }
+  
+  /* Create a responsive layout for smaller screens */
+  @media (min-width: 768px) {
+    .map-container {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  
+    .leaflet-container {
+      flex: 1 1 60%;
+    }
+  
+    .location-details {
+      flex: 1 1 30%;
+      margin-left: 20px;
+      margin-top: 0;
+      max-width: 400px;
+    }
+  }

@@ -1,0 +1,96 @@
+{
+    "sport": "Skiing",
+    "locations": [
+      {
+        "id": 1,
+        "name": "Gulmarg",
+        "state": "Jammu & Kashmir",
+        "coordinates": [34.0583, 74.7833],
+        "description": "Renowned for its powder snow and off-piste skiing.",
+        "bestTimeToVisit": "December to March",
+        "imageUrl": "/images/locations/gulmarg.jpg"
+      },
+      {
+        "id": 2,
+        "name": "Auli",
+        "state": "Uttarakhand",
+        "coordinates": [30.5575, 79.5894],
+        "description": "Popular for its panoramic views and wide range of ski slopes.",
+        "bestTimeToVisit": "December to February",
+        "imageUrl": "/images/locations/auli.jpg"
+      },
+      {
+        "id": 3,
+        "name": "Solang Valley",
+        "state": "Himachal Pradesh",
+        "coordinates": [32.3125, 77.1044],
+        "description": "A popular spot for skiing and adventure sports in the Kullu Valley.",
+        "bestTimeToVisit": "December to February",
+        "imageUrl": "/images/locations/solang-valley.jpg"
+      },
+      {
+        "id": 4,
+        "name": "Manali",
+        "state": "Himachal Pradesh",
+        "coordinates": [32.2396, 77.1887],
+        "description": "Known for its skiing slopes and snow-covered peaks.",
+        "bestTimeToVisit": "December to February",
+        "imageUrl": "/images/locations/manali.jpg"
+      },
+      {
+        "id": 5,
+        "name": "Kufri",
+        "state": "Himachal Pradesh",
+        "coordinates": [31.0987, 77.2753],
+        "description": "Ideal for skiing with excellent slopes and winter sports facilities.",
+        "bestTimeToVisit": "December to February",
+        "imageUrl": "/images/locations/kufri.jpg"
+      },
+      {
+        "id": 6,
+        "name": "Narkanda",
+        "state": "Himachal Pradesh",
+        "coordinates": [31.3791, 77.2957],
+        "description": "A lesser-known gem for skiing and winter sports.",
+        "bestTimeToVisit": "December to February",
+        "imageUrl": "/images/locations/narkanda.jpg"
+      },
+      {
+        "id": 7,
+        "name": "Leh-Ladakh",
+        "state": "Ladakh",
+        "coordinates": [34.1526, 77.5770],
+        "description": "Perfect for adventure enthusiasts looking for snow-covered landscapes.",
+        "bestTimeToVisit": "December to February",
+        "imageUrl": "/images/locations/leh-ladakh.jpg"
+      },
+      {
+        "id": 8,
+        "name": "Kashmir",
+        "state": "Jammu & Kashmir",
+        "coordinates": [33.7741, 76.1277],
+        "description": "Offers a range of skiing opportunities in the winter season.",
+        "bestTimeToVisit": "December to February",
+        "imageUrl": "/images/locations/kashmir.jpg"
+      },
+      {
+        "id": 9,
+        "name": "Pahalgam",
+        "state": "Jammu & Kashmir",
+        "coordinates": [34.1888, 75.3189],
+        "description": "Ideal for beginners with skiing slopes amidst beautiful scenery.",
+        "bestTimeToVisit": "December to February",
+        "imageUrl": "/images/locations/pahalgam.jpg"
+      },
+      {
+        "id": 10,
+        "name": "Munsiyari",
+        "state": "Uttarakhand",
+        "coordinates": [30.0300, 80.1190],
+        "description": "A beautiful destination for skiing and winter sports.",
+        "bestTimeToVisit": "December to February",
+        "imageUrl": "/images/locations/munsiyari.jpg"
+      }
+    ]
+  }
+  

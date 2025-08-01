@@ -1,0 +1,96 @@
+{
+    "sport": "Hang Gliding",
+    "locations": [
+      {
+        "id": 1,
+        "name": "Kamshet",
+        "state": "Maharashtra",
+        "coordinates": [18.7655, 73.4433],
+        "description": "Known as the hang gliding capital of India, Kamshet offers stunning views and favorable wind conditions for gliders.",
+        "bestTimeToVisit": "October to May",
+        "imageUrl": "/images/locations/kamshet-hang-gliding.jpg"
+      },
+      {
+        "id": 2,
+        "name": "Bir Billing",
+        "state": "Himachal Pradesh",
+        "coordinates": [32.0261, 76.7637],
+        "description": "A world-renowned destination for paragliding and hang gliding, offering breathtaking views of the Dhauladhar Range.",
+        "bestTimeToVisit": "March to June, September to November",
+        "imageUrl": "/images/locations/bir-billing-hang-gliding.jpg"
+      },
+      {
+        "id": 3,
+        "name": "Nandi Hills",
+        "state": "Karnataka",
+        "coordinates": [13.1985, 77.5557],
+        "description": "A popular spot for hang gliding enthusiasts, Nandi Hills provides perfect take-off points with panoramic views.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/nandi-hills-hang-gliding.jpg"
+      },
+      {
+        "id": 4,
+        "name": "Pondicherry",
+        "state": "Puducherry",
+        "coordinates": [11.9416, 79.8083],
+        "description": "Hang gliding over the scenic coastline of Pondicherry, where you can enjoy the view of the beaches and French heritage.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/pondicherry-hang-gliding.jpg"
+      },
+      {
+        "id": 5,
+        "name": "Rishikesh",
+        "state": "Uttarakhand",
+        "coordinates": [30.0920, 78.2676],
+        "description": "Rishikesh is not just for river rafting, but also an excellent place for hang gliding, offering majestic views of the Himalayan foothills.",
+        "bestTimeToVisit": "September to June",
+        "imageUrl": "/images/locations/rishikesh-hang-gliding.jpg"
+      },
+      {
+        "id": 6,
+        "name": "Mahabalipuram",
+        "state": "Tamil Nadu",
+        "coordinates": [12.6260, 80.1828],
+        "description": "The coastal town of Mahabalipuram offers great hang gliding conditions with the chance to soar above ancient temples and the sea.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/mahabalipuram-hang-gliding.jpg"
+      },
+      {
+        "id": 7,
+        "name": "Shillong",
+        "state": "Meghalaya",
+        "coordinates": [25.5788, 91.8933],
+        "description": "With its stunning landscape and favorable wind conditions, Shillong provides a great spot for hang gliders.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/shillong-hang-gliding.jpg"
+      },
+      {
+        "id": 8,
+        "name": "Mysore",
+        "state": "Karnataka",
+        "coordinates": [12.2958, 76.6394],
+        "description": "The flatlands around Mysore offer a smooth landing and take-off for hang gliders, with scenic views of the countryside.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/mysore-hang-gliding.jpg"
+      },
+      {
+        "id": 9,
+        "name": "Dhanaulti",
+        "state": "Uttarakhand",
+        "coordinates": [30.3796, 78.2799],
+        "description": "A lesser-known destination for hang gliding, Dhanaulti offers stunning views of the Tehri Lake and the Garhwal region.",
+        "bestTimeToVisit": "March to June, September to November",
+        "imageUrl": "/images/locations/dhanaulti-hang-gliding.jpg"
+      },
+      {
+        "id": 10,
+        "name": "Almora",
+        "state": "Uttarakhand",
+        "coordinates": [29.5910, 79.6195],
+        "description": "Almora offers excellent views of the snow-capped Himalayan peaks, ideal for hang gliding enthusiasts.",
+        "bestTimeToVisit": "April to June, September to December",
+        "imageUrl": "/images/locations/almora-hang-gliding.jpg"
+      }
+    ]
+  }
+  

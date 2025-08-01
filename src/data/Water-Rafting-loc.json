@@ -1,0 +1,96 @@
+{
+    "sport": "Water Rafting",
+    "locations": [
+      {
+        "id": 1,
+        "name": "Rishikesh",
+        "state": "Uttarakhand",
+        "coordinates": [30.0920, 78.2676],
+        "description": "Known for its thrilling white-water rafting experience on the Ganges River.",
+        "bestTimeToVisit": "September to June",
+        "imageUrl": "/images/locations/rishikesh-rafting.jpg"
+      },
+      {
+        "id": 2,
+        "name": "Beas River",
+        "state": "Himachal Pradesh",
+        "coordinates": [32.0170, 76.7152],
+        "description": "A scenic river offering grade 2 to 4 rapids, ideal for rafting enthusiasts.",
+        "bestTimeToVisit": "March to June",
+        "imageUrl": "/images/locations/beas-river.jpg"
+      },
+      {
+        "id": 3,
+        "name": "Kullu",
+        "state": "Himachal Pradesh",
+        "coordinates": [32.0000, 77.1000],
+        "description": "A popular rafting destination on the Beas River, surrounded by stunning Himalayan landscapes.",
+        "bestTimeToVisit": "March to June",
+        "imageUrl": "/images/locations/kullu.jpg"
+      },
+      {
+        "id": 4,
+        "name": "Zanskar River",
+        "state": "Ladakh",
+        "coordinates": [33.0600, 77.5200],
+        "description": "A remote and challenging river known for its grade 3-4 rapids.",
+        "bestTimeToVisit": "July to September",
+        "imageUrl": "/images/locations/zanskar-river.jpg"
+      },
+      {
+        "id": 5,
+        "name": "Alaknanda River",
+        "state": "Uttarakhand",
+        "coordinates": [30.4400, 78.2995],
+        "description": "A river with grade 4 rapids, offering an exciting rafting experience.",
+        "bestTimeToVisit": "September to June",
+        "imageUrl": "/images/locations/alaknanda-river.jpg"
+      },
+      {
+        "id": 6,
+        "name": "Teesta River",
+        "state": "Sikkim",
+        "coordinates": [27.0761, 88.6064],
+        "description": "A fast-flowing river offering both serene and challenging rapids for rafting.",
+        "bestTimeToVisit": "September to November",
+        "imageUrl": "/images/locations/teesta-river.jpg"
+      },
+      {
+        "id": 7,
+        "name": "Kundalika River",
+        "state": "Maharashtra",
+        "coordinates": [18.4496, 73.2210],
+        "description": "A popular river for rafting, especially for first-timers, with grade 2 to 3 rapids.",
+        "bestTimeToVisit": "October to June",
+        "imageUrl": "/images/locations/kundalika-river.jpg"
+      },
+      {
+        "id": 8,
+        "name": "Tungabhadra River",
+        "state": "Karnataka",
+        "coordinates": [15.3014, 75.5022],
+        "description": "A serene yet challenging rafting location, known for its gentle to moderate rapids.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/tungabhadra-river.jpg"
+      },
+      {
+        "id": 9,
+        "name": "Munar River",
+        "state": "Kerala",
+        "coordinates": [10.0881, 77.0628],
+        "description": "A scenic river with easy-to-moderate rapids, ideal for families.",
+        "bestTimeToVisit": "October to March",
+        "imageUrl": "/images/locations/munar-river.jpg"
+      },
+      {
+        "id": 10,
+        "name": "Ganga River (Uttarkashi)",
+        "state": "Uttarakhand",
+        "coordinates": [30.0850, 78.4303],
+        "description": "A thrilling white-water rafting experience with a mix of rapids and serene stretches.",
+        "bestTimeToVisit": "September to June",
+        "imageUrl": "/images/locations/ganga-river-uttarkashi.jpg"
+      }
+    ]
+  }
+  
