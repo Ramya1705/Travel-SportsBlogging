@@ -33,7 +33,7 @@ const app = express();
 // Define the list of allowed websites
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://travel-sportsblogging.onrender.com/'
+  'https://travel-sports-blogging.onrender.com'
 ];
 
 // Set up CORS options
