@@ -100,16 +100,13 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-// --- START: CORS CONFIGURATION ---
-// Define the list of allowed origins (your frontend's deployed URL)
+// --- CORS CONFIGURATION ---
 const allowedOrigins = [
   'https://travel-sportsblogging.onrender.com'
 ];
 
-// Set up CORS options
 const corsOptions = {
   origin: (origin, callback) => {
-    // Check if the request origin is in the allowed list or if it's a same-origin request
     if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
@@ -119,14 +116,13 @@ const corsOptions = {
   credentials: true
 };
 
-// Use the CORS middleware with the defined options
 app.use(cors(corsOptions));
-// --- END: CORS CONFIGURATION ---
+// --- END CORS CONFIGURATION ---
 
 // Middleware
-app.use(express.json()); // Allows server to accept JSON data in request body
-app.use(cookieParser()); // Parses cookies from incoming requests
-app.use(passport.initialize()); // Initializes Passport.js for authentication
+app.use(express.json());
+app.use(cookieParser());
+app.use(passport.initialize());
 
 // Mount Routes
 app.use('/api/auth', authRoutes);
@@ -135,7 +131,7 @@ app.use('/api/posts', postRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/upload', uploadRoutes);
 
-// Error Handler middleware (should be the last piece of middleware)
+// Error Handler middleware
 app.use(errorHandler);
 
 // Get the port from environment variables, or default to 5000 for local development
