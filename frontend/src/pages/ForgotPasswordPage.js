@@ -9,6 +9,7 @@ const ForgotPasswordPage = () => {
     const [error, setError] = useState('');
     const [currentBg, setCurrentBg] = useState(0);
 
+    // Travel and sports themed backgrounds (same as login and register pages)
     const backgrounds = [
         'https://th.bing.com/th/id/OIP.eeNRtdobKIeNskukB9tSoAHaDt?w=287&h=174&c=7&r=0&o=7&dpr=1.7&pid=1.7&rm=3', // Travel destination
         'https://th.bing.com/th/id/R.1c1b8c8219385a0f88a7b6cfcba712ab?rik=u9ceuWoncAl0iQ&riu=http%3a%2f%2fwww.pixelstalk.net%2fwp-content%2fuploads%2f2016%2f08%2fFree-Desktop-Travel-Backgrounds.jpg&ehk=i2gnQlVtAUHLdjoM%2b5hVl%2bStT4ogWTYySuRp0cXXPnc%3d&risl=&pid=ImgRaw&r=0'  // Sports field
