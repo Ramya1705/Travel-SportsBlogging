@@ -70,7 +70,7 @@ router.get(
 
         res.cookie('token', token, options);
         // Redirect the user back to the frontend application
-        res.redirect(process.env.CLIENT_URL || 'http://localhost:3000');
+        res.redirect(process.env.CLIENT_URL || 'https://travel-sports-blogging.onrender.com');
     }
 );
 
