@@ -21,7 +21,7 @@ const ResetPasswordPage = () => {
         try {
             await API.put(`/auth/resetpassword/${token}`, { password });
             setSuccess('Password reset successfully! You can now log in.');
-            setTimeout(() => navigate('/login'), https://travel-sports-blogging.onrender.com);
+            setTimeout(() => navigate('/login'), 3000);
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to reset password.');
         }
