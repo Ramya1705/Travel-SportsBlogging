@@ -40,10 +40,10 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     // Email verification logic
     const verificationToken = user.getVerificationToken();
     await user.save({ validateBeforeSave: false });
-    const verificationUrl = `http://localhost:3000/verify-email/${verificationToken}`;
+    const verificationUrl = `https://travel-sports-blogging.onrender.com/verify-email/${verificationToken}`;
     const message = `Thank you for registering! Please verify your email by clicking the link below:\n\n${verificationUrl}`;
     try {
-        await sendEmail({ email: user.email, subject: 'NexusBlogs Email Verification', message });
+        await sendEmail({ email: user.email, subject: 'Travel and Sports Blogging  Email Verification', message });
         res.status(200).json({ success: true, message: 'Verification email sent. Please check your inbox.' });
     } catch (err) {
         console.error(err);
@@ -112,7 +112,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
     }
     const resetToken = user.getResetPasswordToken();
     await user.save({ validateBeforeSave: false });
-    const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
+    const resetUrl = `https://travel-sports-blogging.onrender.com/reset-password/${resetToken}`;
     const message = `You requested a password reset. Please use the link below:\n\n${resetUrl}`;
     try {
         await sendEmail({ email: user.email, subject: 'Password Reset Token', message, });
