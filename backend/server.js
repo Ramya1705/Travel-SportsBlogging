@@ -32,7 +32,6 @@ const app = express();
 
 // Define the list of allowed websites
 const allowedOrigins = [
-  'http://localhost:3000',
   'https://travel-sports-blogging.onrender.com'
 ];
 
