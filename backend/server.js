@@ -103,12 +103,13 @@ connectDB();
 // --- START: CORS CONFIGURATION ---
 // Define the list of allowed origins (your frontend's deployed URL)
 const allowedOrigins = [
-  'https://travel-sports-blogging.onrender.com'
+  'https://travel-sportsblogging.onrender.com'
 ];
 
 // Set up CORS options
 const corsOptions = {
   origin: (origin, callback) => {
+    // Check if the request origin is in the allowed list or if it's a same-origin request
     if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
@@ -140,5 +141,5 @@ app.use(errorHandler);
 // Get the port from environment variables, or default to 5000 for local development
 const PORT = process.env.PORT || 5000;
 
-// Start the server
+// Start the server by listening on the specified port
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
