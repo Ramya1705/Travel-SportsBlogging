@@ -79,7 +79,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: 'https://travel-sportsblogging.onrender.com',
+    origin: 'https://travel-sports-blogging.onrender.com',
     credentials: true
 }));
 app.use(express.json());
