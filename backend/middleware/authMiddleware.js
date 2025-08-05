@@ -32,7 +32,7 @@
 // };
 // middleware/auth.js - Updated version
 const jwt = require('jsonwebtoken');
-const User = require('../models/User'); // Adjust path as needed
+const User = require('../models/User');
 
 const auth = async (req, res, next) => {
   try {
