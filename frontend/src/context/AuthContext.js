@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
 
             try {
                 // 2. If a token is found, make a request to /auth/me
-                // The Axios interceptor (see axios.js below) will automatically
+                // The Axios interceptor (in axios.js) will automatically
                 // attach this token to the request's Authorization header.
                 const { data } = await API.get('/auth/me');
                 setUser(data); // Set the user data if the request succeeds
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
             }
         };
         checkUser();
-    }, []); // Empty dependency array ensures this runs only once on mount
+    }, []); // Empty dependency array ensures this runs only once on component mount
 
     const login = async (email, password) => {
         // Assume your backend's /auth/login endpoint returns { token: '...', user: { ... } }
