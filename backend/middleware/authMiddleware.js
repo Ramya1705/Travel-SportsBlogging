@@ -32,86 +32,68 @@
 // };
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const asyncHandler = require('./asyncHandler'); // Assuming this is your asyncHandler utility
+const asyncHandler = require('./asyncHandler');
 
-/**
- * @desc Protects routes by verifying JWT from Authorization header or cookies.
- * Populates req.user with authenticated user data.
- */
 exports.protect = asyncHandler(async (req, res, next) => {
     let token;
 
-    // 1. Check if the token is sent in the Authorization header (standard for JWTs)
+    // Log the entire Authorization header received by the backend
+    console.log('Backend: Raw Authorization Header:', req.headers.authorization);
+
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         try {
-            // Extract the token string from "Bearer <token>"
             token = req.headers.authorization.split(' ')[1];
-            // console.log('Backend: Token extracted from Authorization header:', token); // For debugging
+            // Log the token string extracted from the header
+            console.log('Backend: Extracted Token from Header:', token);
         } catch (error) {
             console.error('Backend: Error extracting token from Authorization header:', error);
             res.status(401);
             throw new Error('Not authorized, token extraction failed');
         }
-    } 
-    // 2. Fallback: If not in Authorization header, check if the token is in cookies
-    // This is useful if you still have parts of your app relying on cookie-based auth,
-    // or for the initial Google OAuth callback if it sets a cookie.
-    else if (req.cookies.token) {
+    } else if (req.cookies.token) {
         token = req.cookies.token;
-        // console.log('Backend: Token found in cookies:', token); // For debugging
+        // Log the token string found in cookies
+        console.log('Backend: Token found in cookies:', token);
     }
 
-    // If a token was successfully found (either in header or cookies)
     if (token) {
         try {
-            // Verify the token using your JWT_SECRET from environment variables
+            // This is the line where jwt.verify is called.
+            // Log the JWT_SECRET used for verification
+            console.log('Backend: JWT_SECRET used for verification:', process.env.JWT_SECRET);
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            // console.log('Backend: JWT Decoded Payload:', decoded); // For debugging
-            // console.log('Backend: JWT_SECRET used for verification:', process.env.JWT_SECRET); // For debugging
+            console.log('Backend: JWT Decoded Payload:', decoded);
 
-            // Find the user in the database based on the ID from the decoded token
-            req.user = await User.findById(decoded.id).select('-password'); // Exclude password from user object
-
-            // IMPORTANT: Check if the user was actually found in the database
-            // If the user ID from the token doesn't correspond to an existing user,
-            // this is an invalid token scenario.
+            req.user = await User.findById(decoded.id).select('-password');
+            
             if (!req.user) {
                 res.status(401);
                 throw new Error('Not authorized, user not found for this token ID');
             }
 
-            // If everything is successful, proceed to the next middleware or route handler
             next();
         } catch (error) {
-            // Handle specific JWT verification errors (e.g., 'jwt expired', 'invalid signature')
+            // This catch block will execute if jwt.verify fails (e.g., 'jwt malformed')
             console.error('Backend: JWT Verification Failed:', error.message);
             res.status(401);
             throw new Error(`Not authorized, token failed: ${error.message}`);
         }
     } else {
-        // If no token was found at all in either header or cookies
         res.status(401);
         throw new Error('Not authorized, no token provided');
     }
 });
 
-/**
- * @desc Authorizes users based on their role. Must be used after 'protect' middleware.
- * @param {...string} roles - Roles allowed to access the route (e.g., 'admin', 'user')
- */
 exports.authorize = (...roles) => {
     return (req, res, next) => {
-        // Ensure req.user exists before attempting to access its role property.
-        // This prevents the "Cannot read properties of null (reading 'role')" error.
         if (req.user && roles.includes(req.user.role)) {
-            next(); // User is authorized, proceed
+            next();
         } else {
-            // If req.user is missing (should ideally be caught by 'protect')
-            // OR if the user's role is not among the authorized roles
-            res.status(403); // Forbidden
-            const userRole = req.user ? req.user.role : 'unknown'; // Safely get role for error message
+            res.status(403);
+            const userRole = req.user ? req.user.role : 'unknown';
             throw new Error(`User role ${userRole} is not authorized to access this route`);
         }
     };
 };
+
 
