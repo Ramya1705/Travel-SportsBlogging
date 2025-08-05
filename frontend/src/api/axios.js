@@ -1,14 +1,35 @@
 import axios from 'axios';
 
-// Create the Axios instance with the base URL and credentials setting.
-// Do NOT import AuthContext or any other component/context here.
 const API = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-    withCredentials: true, // This is important for sending cookies
+  baseURL: 'https://travel-sportsblogging.onrender.com/api', // IMPORTANT: Ensure this is your deployed backend URL
+  withCredentials: true // Keep this if your backend still relies on cookies for some routes (e.g., for Google OAuth initial handshake)
 });
 
-// We are not setting an interceptor here because the `withCredentials: true`
-// option automatically handles sending the httpOnly cookie with every request.
-// An interceptor would only be needed if you were storing the JWT in localStorage.
+// Request Interceptor: This runs before every request
+API.interceptors.request.use(config => {
+  const token = localStorage.getItem('authToken'); // Get the token from localStorage
+  if (token) {
+    // If a token exists, add it to the Authorization header as a Bearer token
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config; // Return the modified config
+}, error => {
+  // Handle request errors
+  return Promise.reject(error);
+});
+
+// Response Interceptor (Optional but Recommended): Handles responses globally
+API.interceptors.response.use(response => {
+  return response;
+}, error => {
+  // If the server responds with a 401 Unauthorized status
+  if (error.response && error.response.status === 401) {
+    console.warn('Unauthorized request detected. Clearing token.');
+    localStorage.removeItem('authToken'); // Clear the invalid token
+    // Optionally, redirect the user to the login page
+    // window.location.href = '/login'; 
+  }
+  return Promise.reject(error); // Propagate the error
+});
 
 export default API;
