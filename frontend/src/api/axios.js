@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Create a new instance of Axios with your base URL
 const API = axios.create({
-  baseURL: 'https://travel-sportsblogging.onrender.com/api', // Ensure this matches your backend API URL
+  baseURL: 'https://travel-sportsblogging.onrender.com', // Ensure this matches your backend API URL
 });
 
 // Use an interceptor to add the authorization header to every request
