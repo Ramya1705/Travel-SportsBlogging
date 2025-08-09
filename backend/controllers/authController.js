@@ -15,7 +15,9 @@ const sendTokenResponse = (user, statusCode, res) => {
     const options = {
         expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
         httpOnly: true,
+        // *** CRUCIAL FIX: Added `sameSite` attribute ***
         secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
     };
     res.status(statusCode).cookie('token', token, options).json({
         _id: user._id, name: user.name, email: user.email,
@@ -23,7 +25,7 @@ const sendTokenResponse = (user, statusCode, res) => {
     });
 };
 
-// @desc    Register user & send email verification
+// @desc      Register user & send email verification
 exports.registerUser = asyncHandler(async (req, res, next) => {
     const { name, email, password } = req.body;
     const userExists = await User.findOne({ email });
@@ -40,10 +42,10 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     // Email verification logic
     const verificationToken = user.getVerificationToken();
     await user.save({ validateBeforeSave: false });
-    const verificationUrl = `https://travel-sports-blogging.onrender.com/verify-email/${verificationToken}`;
+    const verificationUrl = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`; // Corrected URL
     const message = `Thank you for registering! Please verify your email by clicking the link below:\n\n${verificationUrl}`;
     try {
-        await sendEmail({ email: user.email, subject: 'Travel and Sports Blogging  Email Verification', message });
+        await sendEmail({ email: user.email, subject: 'NexusBlogs Email Verification', message });
         res.status(200).json({ success: true, message: 'Verification email sent. Please check your inbox.' });
     } catch (err) {
         console.error(err);
@@ -55,7 +57,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     }
 });
 
-// @desc    Login user
+// @desc      Login user
 exports.loginUser = asyncHandler(async (req, res, next) => {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -74,8 +76,7 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
     sendTokenResponse(user, 200, res);
 });
 
-
-// @desc    Verify email
+// @desc      Verify email
 exports.verifyEmail = asyncHandler(async (req, res, next) => {
     const verificationToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
     const user = await User.findOne({ verificationToken, verificationTokenExpire: { $gt: Date.now() } });
@@ -87,23 +88,27 @@ exports.verifyEmail = asyncHandler(async (req, res, next) => {
     user.verificationToken = undefined;
     user.verificationTokenExpire = undefined;
     await user.save();
-    sendTokenResponse(user, 200, res);
+    // Redirect to the frontend after verification
+    res.redirect(`${process.env.CLIENT_URL}/login`);
 });
 
-// @desc    Logout user
+// @desc      Logout user
 exports.logoutUser = (req, res) => {
-    res.cookie('token', 'none', {
-        expires: new Date(Date.now() + 10 * 1000),
+    const options = {
+        expires: new Date(Date.now() + 10 * 1000), // Expire immediately
         httpOnly: true,
-    }).status(200).json({ success: true, message: 'Logged out successfully' });
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+    };
+    res.status(200).cookie('token', 'none', options).json({ success: true, message: 'Logged out successfully' });
 };
 
-// @desc    Get current user (protected route)
+// @desc      Get current user (protected route)
 exports.getMe = asyncHandler(async (req, res) => {
     res.status(200).json(req.user);
 });
 
-// @desc    Forgot password
+// @desc      Forgot password
 exports.forgotPassword = asyncHandler(async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
@@ -112,7 +117,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
     }
     const resetToken = user.getResetPasswordToken();
     await user.save({ validateBeforeSave: false });
-    const resetUrl = `https://travel-sports-blogging.onrender.com/reset-password/${resetToken}`;
+    const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`; // Corrected URL
     const message = `You requested a password reset. Please use the link below:\n\n${resetUrl}`;
     try {
         await sendEmail({ email: user.email, subject: 'Password Reset Token', message, });
@@ -127,7 +132,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
     }
 });
 
-// @desc    Reset password
+// @desc      Reset password
 exports.resetPassword = asyncHandler(async (req, res, next) => {
     const resetToken = crypto.createHash('sha256').update(req.params.resettoken).digest('hex');
     const user = await User.findOne({
