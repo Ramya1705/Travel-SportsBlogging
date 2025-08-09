@@ -1,3 +1,4 @@
+// src/context/AuthContext.js
 import React, { createContext, useState, useEffect } from 'react';
 import API from '../api/axios';
 
@@ -7,27 +8,76 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    // ====================================
+    // Debugging + Auth Check on Mount
+    // ====================================
     useEffect(() => {
-        const checkUser = async () => {
-            try {
-                const { data } = await API.get('/auth/me');
-                setUser(data);
-            } catch (error) {
+        const checkAuth = async () => {
+            // Try to get token from localStorage or cookies
+            const token =
+                localStorage.getItem('token') ||
+                document.cookie
+                    .split('; ')
+                    .find(row => row.startsWith('token='))
+                    ?.split('=')[1];
+
+            console.log('🔍 Frontend Debug:');
+            console.log('Token from localStorage:', localStorage.getItem('token'));
+            console.log('Cookies:', document.cookie);
+            console.log('Final token used:', token);
+
+            if (token) {
+                try {
+                    const response = await fetch('/api/auth/me', {
+                        method: 'GET',
+                        credentials: 'include', // Important for cookies
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                        },
+                    });
+
+                    console.log('Response status:', response.status);
+                    console.log(
+                        'Response headers:',
+                        Object.fromEntries(response.headers)
+                    );
+
+                    if (response.ok) {
+                        const userData = await response.json();
+                        setUser(userData);
+                    } else {
+                        console.warn('Auth failed, clearing token');
+                        localStorage.removeItem('token');
+                        setUser(null);
+                    }
+                } catch (error) {
+                    console.error('Auth check error:', error);
+                    setUser(null);
+                }
+            } else {
                 setUser(null);
-            } finally {
-                setLoading(false);
             }
+            setLoading(false);
         };
-        checkUser();
+
+        checkAuth();
     }, []);
 
+    // ====================================
+    // Auth Actions
+    // ====================================
     const login = async (email, password) => {
         const { data } = await API.post('/auth/login', { email, password });
         setUser(data);
     };
-    
+
     const register = async (name, email, password) => {
-        const { data } = await API.post('/auth/register', { name, email, password });
+        const { data } = await API.post('/auth/register', {
+            name,
+            email,
+            password,
+        });
         setUser(data);
     };
 
@@ -37,7 +87,9 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, setUser, login, register, logout, loading }}>
+        <AuthContext.Provider
+            value={{ user, setUser, login, register, logout, loading }}
+        >
             {!loading && children}
         </AuthContext.Provider>
     );
