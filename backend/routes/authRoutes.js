@@ -62,12 +62,17 @@ router.get(
         // On success, create our own JWT and send it as a cookie
         const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
-        const options = {
-            expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-        };
-
+        // const options = {
+        //     expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        //     httpOnly: true,
+        //     secure: process.env.NODE_ENV === 'production',
+        // };
+          const options = {
+    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+};
         res.cookie('token', token, options);
         // Redirect the user back to the frontend application
         res.redirect(process.env.CLIENT_URL || 'https://travel-sports-blogging.onrender.com');
