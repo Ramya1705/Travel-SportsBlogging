@@ -1,6 +1,6 @@
 // src/pages/LoginPage.js
 import React, { useState, useContext, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import {
     Container,
@@ -19,7 +19,8 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [currentBg, setCurrentBg] = useState(0);
-    const { login } = useContext(AuthContext);
+    const [searchParams] = useSearchParams();
+    const { login, setAuthToken } = useContext(AuthContext);
     const navigate = useNavigate();
 
     // Travel and sports themed backgrounds
@@ -35,6 +36,33 @@ const LoginPage = () => {
         }, 6000);
         return () => clearInterval(interval);
     }, [backgrounds.length]);
+
+    // Handle Google auth callback
+    useEffect(() => {
+        const token = searchParams.get('token');
+        const error = searchParams.get('error');
+
+        console.log('🔍 Google Auth Callback Debug:');
+        console.log('URL token:', token);
+        console.log('URL error:', error);
+
+        if (token) {
+            console.log('✅ Google auth successful, storing token');
+            localStorage.setItem('token', token);
+            
+            // Update auth context if you have setAuthToken method
+            if (setAuthToken) {
+                setAuthToken(token);
+            }
+            
+            // Clear URL params and redirect
+            window.history.replaceState({}, document.title, window.location.pathname);
+            navigate('/');
+        } else if (error) {
+            console.error('❌ Google auth failed:', error);
+            setError(decodeURIComponent(error));
+        }
+    }, [searchParams, navigate, setAuthToken]);
 
     // Debug token info when page loads
     useEffect(() => {
@@ -57,13 +85,19 @@ const LoginPage = () => {
             await login(email, password);
             navigate('/');
         } catch (err) {
+            console.error('Regular login error:', err);
             setError(err.response?.data?.message || 'Failed to login');
         }
     };
 
     const handleGoogleLogin = () => {
-        // Redirects to the backend Google authentication route
-        window.location.href = `${process.env.REACT_APP_API_URL}/auth/google`;
+        console.log('🚀 Starting Google authentication...');
+        // Your backend should redirect back to: /login?token=JWT_TOKEN or /login?error=ERROR_MESSAGE
+        const redirectUrl = `${window.location.origin}/login`;
+        const googleAuthUrl = `${process.env.REACT_APP_API_URL}/auth/google?redirect=${encodeURIComponent(redirectUrl)}`;
+        
+        console.log('Redirecting to:', googleAuthUrl);
+        window.location.href = googleAuthUrl;
     };
 
     return (
