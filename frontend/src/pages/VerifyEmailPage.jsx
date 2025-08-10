@@ -26,8 +26,7 @@ const VerifyEmailPage = () => {
             try {
                 console.log('🔍 Starting email verification for token:', token);
                 
-                // FIXED: Changed the API endpoint from '/auth/verify-email' to '/verify-email'
-                // This aligns with the path shown in your 404 error
+                // FIXED: Changed the API endpoint to '/verify-email' to resolve the 404 error
                 const { data } = await API.get(`/verify-email/${token}`);
                 
                 console.log('✅ Verification successful:', data);
