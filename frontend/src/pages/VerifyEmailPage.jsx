@@ -10,10 +10,11 @@ const VerifyEmailPage = () => {
     const { token } = useParams();
     const navigate = useNavigate();
     const { setUser, isAuthenticated } = useContext(AuthContext);
-    const [status, setStatus] = useState('verifying'); // 'verifying', 'success', 'error'
+    const [status, setStatus] = useState('verifying');
     const [message, setMessage] = useState('Verifying your email...');
     const [userDetails, setUserDetails] = useState(null);
     const [countdown, setCountdown] = useState(5);
+    const [debugInfo, setDebugInfo] = useState(null);
 
     useEffect(() => {
         if (!token) {
@@ -25,11 +26,53 @@ const VerifyEmailPage = () => {
         const verifyToken = async () => {
             try {
                 console.log('🔍 Starting email verification for token:', token);
+                console.log('🌐 API Base URL:', API.defaults.baseURL);
+                console.log('📡 Full URL will be:', `${API.defaults.baseURL}/verify-email/${token}`);
                 
-                // FIXED: Changed the API endpoint to '/verify-email' to resolve the 404 error
-                const { data } = await API.get(`/verify-email/${token}`);
+                // Try multiple possible endpoints to debug
+                const possibleEndpoints = [
+                    `/verify-email/${token}`,
+                    `/auth/verify-email/${token}`,
+                    `/api/verify-email/${token}`,
+                    `/users/verify-email/${token}`,
+                    `/verify/${token}`,
+                    `/auth/verify/${token}`
+                ];
+
+                let response;
+                let successfulEndpoint;
+
+                // Try each endpoint until one works
+                for (const endpoint of possibleEndpoints) {
+                    try {
+                        console.log(`🧪 Testing endpoint: ${endpoint}`);
+                        response = await API.get(endpoint);
+                        successfulEndpoint = endpoint;
+                        console.log(`✅ Success with endpoint: ${endpoint}`, response.data);
+                        break;
+                    } catch (testError) {
+                        console.log(`❌ Failed endpoint: ${endpoint}`, testError.response?.status);
+                        if (testError.response?.status === 404) {
+                            continue; // Try next endpoint
+                        } else {
+                            // If it's not a 404, it might be the right endpoint but with other issues
+                            throw testError;
+                        }
+                    }
+                }
+
+                if (!response) {
+                    throw new Error('All verification endpoints returned 404. Please check your backend routes.');
+                }
+
+                const { data } = response;
                 
-                console.log('✅ Verification successful:', data);
+                // Store debug info
+                setDebugInfo({
+                    successfulEndpoint,
+                    testedEndpoints: possibleEndpoints,
+                    responseData: data
+                });
                 
                 // Store user details
                 setUserDetails(data);
@@ -39,9 +82,6 @@ const VerifyEmailPage = () => {
                 
                 setStatus('success');
                 setMessage(`Welcome ${data.name}! Your email has been verified successfully.`);
-                
-                // Show success alert
-                alert(`🎉 Email Verified Successfully!\n\nWelcome ${data.name}!\nYou are now logged in and will be redirected to the home page.`);
                 
                 console.log('🏠 Starting countdown for home page redirect...');
                 
@@ -69,12 +109,45 @@ const VerifyEmailPage = () => {
                 
             } catch (err) {
                 console.error('❌ Email verification error:', err);
+                
+                // Enhanced error logging
+                console.error('Error details:', {
+                    status: err.response?.status,
+                    statusText: err.response?.statusText,
+                    data: err.response?.data,
+                    config: {
+                        url: err.config?.url,
+                        baseURL: err.config?.baseURL,
+                        fullURL: `${err.config?.baseURL}${err.config?.url}`
+                    }
+                });
+
                 setStatus('error');
-                const errorMessage = err.response?.data?.message || 'Verification failed. The link may be invalid or expired.';
+                let errorMessage = 'Verification failed. ';
+                
+                if (err.response?.status === 404) {
+                    errorMessage += 'The verification endpoint was not found. Please check your backend server routes.';
+                } else if (err.response?.status === 400) {
+                    errorMessage += 'Invalid or expired verification token.';
+                } else if (err.response?.status === 500) {
+                    errorMessage += 'Server error occurred during verification.';
+                } else if (err.message.includes('Network Error')) {
+                    errorMessage += 'Unable to connect to the server. Please check your internet connection.';
+                } else {
+                    errorMessage += err.response?.data?.message || err.message || 'An unexpected error occurred.';
+                }
+                
                 setMessage(errorMessage);
                 
-                // Show error alert
-                alert(`❌ Email Verification Failed\n\n${errorMessage}\n\nPlease try requesting a new verification email.`);
+                // Store debug info for error case
+                setDebugInfo({
+                    error: true,
+                    status: err.response?.status,
+                    statusText: err.response?.statusText,
+                    errorData: err.response?.data,
+                    fullURL: `${err.config?.baseURL}${err.config?.url}`,
+                    testedEndpoints: ['/verify-email/' + token] // Only the failed one in error case
+                });
             }
         };
 
@@ -109,8 +182,32 @@ const VerifyEmailPage = () => {
         if (!email) return;
 
         try {
-            await API.post('/auth/resend-verification', { email });
-            alert('✅ New verification email sent! Please check your inbox.');
+            // Try multiple possible resend endpoints too
+            const resendEndpoints = [
+                '/auth/resend-verification',
+                '/resend-verification',
+                '/auth/resend-email',
+                '/users/resend-verification'
+            ];
+
+            let success = false;
+            for (const endpoint of resendEndpoints) {
+                try {
+                    await API.post(endpoint, { email });
+                    success = true;
+                    break;
+                } catch (error) {
+                    if (error.response?.status !== 404) {
+                        throw error;
+                    }
+                }
+            }
+
+            if (success) {
+                alert('✅ New verification email sent! Please check your inbox.');
+            } else {
+                alert('❌ Could not find the resend verification endpoint. Please contact support.');
+            }
         } catch (error) {
             const errorMsg = error.response?.data?.message || 'Failed to resend verification email';
             alert(`❌ ${errorMsg}`);
@@ -123,9 +220,10 @@ const VerifyEmailPage = () => {
             status,
             countdown,
             isAuthenticated,
-            userDetails: userDetails ? { name: userDetails.name, email: userDetails.email } : null
+            userDetails: userDetails ? { name: userDetails.name, email: userDetails.email } : null,
+            debugInfo
         });
-    }, [status, countdown, isAuthenticated, userDetails]);
+    }, [status, countdown, isAuthenticated, userDetails, debugInfo]);
 
     return (
         <Container maxWidth="sm">
@@ -142,6 +240,9 @@ const VerifyEmailPage = () => {
                                 <CircularProgress size={60} sx={{ mb: 2 }} />
                                 <Typography variant="body1" color="text.secondary">
                                     {message}
+                                </Typography>
+                                <Typography variant="caption" color="text.secondary" sx={{ mt: 2, display: 'block' }}>
+                                    Testing verification endpoints...
                                 </Typography>
                             </Box>
                         )}
@@ -189,6 +290,15 @@ const VerifyEmailPage = () => {
                                 <Typography variant="caption" color="text.secondary">
                                     Authentication Status: {isAuthenticated ? '✅ Logged In' : '⏳ Logging In...'}
                                 </Typography>
+
+                                {/* Debug info for success */}
+                                {debugInfo && (
+                                    <Box sx={{ mt: 2, p: 1, bgcolor: 'grey.50', borderRadius: 1 }}>
+                                        <Typography variant="caption" color="text.secondary">
+                                            Debug: Used endpoint {debugInfo.successfulEndpoint}
+                                        </Typography>
+                                    </Box>
+                                )}
                             </Box>
                         )}
                         
@@ -202,8 +312,25 @@ const VerifyEmailPage = () => {
                                     {message}
                                 </Alert>
                                 
+                                {/* Debug information in error state */}
+                                {debugInfo && (
+                                    <Box sx={{ mb: 3, p: 2, bgcolor: 'grey.50', borderRadius: 1, textAlign: 'left' }}>
+                                        <Typography variant="body2" color="text.secondary">
+                                            <strong>Debug Information:</strong><br />
+                                            Status: {debugInfo.status || 'Network Error'}<br />
+                                            URL Attempted: {debugInfo.fullURL}<br />
+                                            {debugInfo.errorData && (
+                                                <>Server Response: {JSON.stringify(debugInfo.errorData)}<br /></>
+                                            )}
+                                        </Typography>
+                                    </Box>
+                                )}
+                                
                                 <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                                    The verification link may be invalid, expired, or already used.
+                                    {debugInfo?.status === 404 
+                                        ? 'The verification endpoint was not found on the server. Please check your backend routes.'
+                                        : 'The verification link may be invalid, expired, or already used.'
+                                    }
                                 </Typography>
                                 
                                 <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
