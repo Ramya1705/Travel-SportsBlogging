@@ -37,6 +37,13 @@ import SportDetailPage from './components/SportDetailPage';
 import Recommend from './components/Recommended/Recommend';
 import DestinationDetail from './components/destinations/DestinationDetail.js';
 
+
+
+// In your Routes component, add:
+
+
+// Alternative: You can create a separate error page component if needed
+// But the current VerifyEmailPage handles both success and error states
 const theme = createTheme({
   palette: {
     mode: 'light',
@@ -97,6 +104,7 @@ function App() {
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/signup" element={<RegisterPage />} />
                   <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
+<Route path="/verify-email-error" element={<VerifyEmailPage />} />
                   <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                   <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
 
