@@ -15,13 +15,16 @@ const sendTokenResponse = (user, statusCode, res) => {
     const options = {
         expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
         httpOnly: true,
-        // *** CRUCIAL FIX: Added `sameSite` attribute ***
         secure: process.env.NODE_ENV === 'production',
         sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
     };
     res.status(statusCode).cookie('token', token, options).json({
-        _id: user._id, name: user.name, email: user.email,
-        role: user.role, bio: user.bio, profilePicture: user.profilePicture,
+        _id: user._id, 
+        name: user.name, 
+        email: user.email,
+        role: user.role, 
+        bio: user.bio, 
+        profilePicture: user.profilePicture,
     });
 };
 
@@ -54,16 +57,27 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     await user.save({ validateBeforeSave: false });
     console.log('User saved with verification token');
     
-    const verificationUrl = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
+    // 🎯 FIXED: Use backend URL for verification endpoint
+    const backendUrl = process.env.BACKEND_URL || 'https://travel-sportsblogging.onrender.com';
+    const verificationUrl = `${backendUrl}/verify-email/${verificationToken}`;
+    
     console.log('Verification URL generated:', verificationUrl);
+    console.log('BACKEND_URL from env:', process.env.BACKEND_URL);
     console.log('CLIENT_URL from env:', process.env.CLIENT_URL);
     
     const message = `Thank you for registering! Please verify your email by clicking the link below:\n\n${verificationUrl}`;
     
     try {
-        await sendEmail({ email: user.email, subject: 'NexusBlogs Email Verification', message });
+        await sendEmail({ 
+            email: user.email, 
+            subject: 'NexusBlogs Email Verification', 
+            message 
+        });
         console.log('Verification email sent successfully to:', user.email);
-        res.status(200).json({ success: true, message: 'Verification email sent. Please check your inbox.' });
+        res.status(200).json({ 
+            success: true, 
+            message: 'Verification email sent. Please check your inbox.' 
+        });
     } catch (err) {
         console.error('Email sending failed:', err);
         user.verificationToken = undefined;
@@ -209,6 +223,63 @@ exports.verifyEmail = asyncHandler(async (req, res, next) => {
     res.status(200).json(responseData);
 });
 
+// @desc      Resend verification email
+exports.resendVerificationEmail = asyncHandler(async (req, res, next) => {
+    console.log('=== RESEND VERIFICATION EMAIL DEBUG ===');
+    console.log('Resend request for email:', req.body.email);
+    
+    const { email } = req.body;
+    
+    if (!email) {
+        res.status(400);
+        throw new Error('Please provide an email address');
+    }
+    
+    const user = await User.findOne({ email });
+    
+    if (!user) {
+        res.status(404);
+        throw new Error('No user found with that email');
+    }
+    
+    if (user.isVerified) {
+        res.status(400);
+        throw new Error('User is already verified');
+    }
+    
+    // Generate new verification token
+    const verificationToken = user.getVerificationToken();
+    await user.save({ validateBeforeSave: false });
+    
+    // Use backend URL for verification
+    const backendUrl = process.env.BACKEND_URL || 'https://travel-sportsblogging.onrender.com';
+    const verificationUrl = `${backendUrl}/verify-email/${verificationToken}`;
+    
+    console.log('New verification URL:', verificationUrl);
+    
+    const message = `Your new email verification link:\n\n${verificationUrl}`;
+    
+    try {
+        await sendEmail({
+            email: user.email,
+            subject: 'NexusBlogs - New Email Verification',
+            message
+        });
+        console.log('New verification email sent to:', user.email);
+        res.status(200).json({
+            success: true,
+            message: 'New verification email sent. Please check your inbox.'
+        });
+    } catch (err) {
+        console.error('Resend verification email failed:', err);
+        user.verificationToken = undefined;
+        user.verificationTokenExpire = undefined;
+        await user.save({ validateBeforeSave: false });
+        res.status(500);
+        throw new Error('Email could not be sent');
+    }
+});
+
 // @desc      Logout user
 exports.logoutUser = (req, res) => {
     console.log('=== LOGOUT USER DEBUG ===');
@@ -220,7 +291,10 @@ exports.logoutUser = (req, res) => {
         secure: process.env.NODE_ENV === 'production',
         sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
     };
-    res.status(200).cookie('token', 'none', options).json({ success: true, message: 'Logged out successfully' });
+    res.status(200).cookie('token', 'none', options).json({ 
+        success: true, 
+        message: 'Logged out successfully' 
+    });
 };
 
 // @desc      Get current user (protected route)
@@ -245,15 +319,24 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
     const resetToken = user.getResetPasswordToken();
     await user.save({ validateBeforeSave: false });
     
-    const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
+    // 🎯 FIXED: Use frontend URL for password reset (this should go to frontend)
+    const clientUrl = process.env.CLIENT_URL || 'https://travel-sports-blogging.onrender.com';
+    const resetUrl = `${clientUrl}/reset-password/${resetToken}`;
     console.log('Password reset URL:', resetUrl);
     
     const message = `You requested a password reset. Please use the link below:\n\n${resetUrl}`;
     
     try {
-        await sendEmail({ email: user.email, subject: 'Password Reset Token', message, });
+        await sendEmail({ 
+            email: user.email, 
+            subject: 'Password Reset Token', 
+            message 
+        });
         console.log('Password reset email sent to:', user.email);
-        res.status(200).json({ success: true, message: 'Reset email sent' });
+        res.status(200).json({ 
+            success: true, 
+            message: 'Reset email sent' 
+        });
     } catch (err) {
         console.error('Password reset email failed:', err);
         user.resetPasswordToken = undefined;
@@ -287,5 +370,53 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
     user.resetPasswordExpire = undefined;
     await user.save();
     
+    sendTokenResponse(user, 200, res);
+});
+
+// @desc      Update user details
+exports.updateDetails = asyncHandler(async (req, res, next) => {
+    console.log('=== UPDATE USER DETAILS DEBUG ===');
+    console.log('Update request for user:', req.user.email);
+    
+    const fieldsToUpdate = {
+        name: req.body.name,
+        email: req.body.email,
+        bio: req.body.bio
+    };
+    
+    // Remove undefined fields
+    Object.keys(fieldsToUpdate).forEach(key => 
+        fieldsToUpdate[key] === undefined && delete fieldsToUpdate[key]
+    );
+    
+    console.log('Fields to update:', fieldsToUpdate);
+    
+    const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
+        new: true,
+        runValidators: true
+    });
+    
+    console.log('User updated successfully:', user.email);
+    res.status(200).json(user);
+});
+
+// @desc      Update password
+exports.updatePassword = asyncHandler(async (req, res, next) => {
+    console.log('=== UPDATE PASSWORD DEBUG ===');
+    console.log('Password update request for user:', req.user.email);
+    
+    const user = await User.findById(req.user.id).select('+password');
+    
+    // Check current password
+    if (!(await user.matchPassword(req.body.currentPassword))) {
+        console.log('Current password incorrect for user:', user.email);
+        res.status(400);
+        throw new Error('Current password is incorrect');
+    }
+    
+    user.password = req.body.newPassword;
+    await user.save();
+    
+    console.log('Password updated successfully for user:', user.email);
     sendTokenResponse(user, 200, res);
 });
