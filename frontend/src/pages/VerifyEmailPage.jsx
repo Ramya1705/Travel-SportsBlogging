@@ -9,7 +9,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 const VerifyEmailPage = () => {
     const { token } = useParams();
     const navigate = useNavigate();
-    const { setUser } = useContext(AuthContext);
+    const { setUser, isAuthenticated } = useContext(AuthContext);
     const [status, setStatus] = useState('verifying'); // 'verifying', 'success', 'error'
     const [message, setMessage] = useState('Verifying your email...');
     const [userDetails, setUserDetails] = useState(null);
@@ -24,35 +24,51 @@ const VerifyEmailPage = () => {
 
         const verifyToken = async () => {
             try {
+                console.log('🔍 Starting email verification for token:', token);
+                
                 // Make API call to verify email
                 const { data } = await API.get(`/auth/verify-email/${token}`);
                 
+                console.log('✅ Verification successful:', data);
+                
                 // Store user details
                 setUserDetails(data);
-                setUser(data); // Set the user in global context (logs them in)
+                
+                // Set user in global context (logs them in)
+                setUser(data);
+                
                 setStatus('success');
                 setMessage(`Welcome ${data.name}! Your email has been verified successfully.`);
                 
                 // Show success alert
                 alert(`🎉 Email Verified Successfully!\n\nWelcome ${data.name}!\nYou are now logged in and will be redirected to the home page.`);
                 
-                // Start countdown for redirect
+                console.log('🏠 Starting countdown for home page redirect...');
+                
+                // Start countdown and redirect
                 let timeLeft = 5;
-                const countdownInterval = setInterval(() => {
+                setCountdown(timeLeft);
+                
+                const redirectTimer = setInterval(() => {
                     timeLeft -= 1;
+                    console.log(`⏱️ Redirect countdown: ${timeLeft} seconds`);
                     setCountdown(timeLeft);
                     
                     if (timeLeft <= 0) {
-                        clearInterval(countdownInterval);
-                        navigate('/'); // Redirect to home page
+                        clearInterval(redirectTimer);
+                        console.log('🚀 Redirecting to home page now!');
+                        navigate('/', { replace: true });
                     }
                 }, 1000);
 
-                // Cleanup interval on component unmount
-                return () => clearInterval(countdownInterval);
+                // Cleanup function
+                return () => {
+                    console.log('🧹 Cleaning up redirect timer');
+                    clearInterval(redirectTimer);
+                };
                 
             } catch (err) {
-                console.error('Email verification error:', err);
+                console.error('❌ Email verification error:', err);
                 setStatus('error');
                 const errorMessage = err.response?.data?.message || 'Verification failed. The link may be invalid or expired.';
                 setMessage(errorMessage);
@@ -65,12 +81,27 @@ const VerifyEmailPage = () => {
         verifyToken();
     }, [token, setUser, navigate]);
 
+    // Force redirect if user becomes authenticated
+    useEffect(() => {
+        if (isAuthenticated && status === 'success') {
+            console.log('👤 User is now authenticated, ensuring redirect to home');
+            const forceRedirectTimer = setTimeout(() => {
+                console.log('🏠 Force redirecting to home page');
+                navigate('/', { replace: true });
+            }, 1000);
+
+            return () => clearTimeout(forceRedirectTimer);
+        }
+    }, [isAuthenticated, status, navigate]);
+
     const handleGoToHome = () => {
-        navigate('/');
+        console.log('🏠 Manual redirect to home page');
+        navigate('/', { replace: true });
     };
 
     const handleGoToLogin = () => {
-        navigate('/login');
+        console.log('🔐 Redirecting to login page');
+        navigate('/login', { replace: true });
     };
 
     const handleResendVerification = async () => {
@@ -85,6 +116,16 @@ const VerifyEmailPage = () => {
             alert(`❌ ${errorMsg}`);
         }
     };
+
+    // Debug logging
+    useEffect(() => {
+        console.log('📊 VerifyEmailPage State:', {
+            status,
+            countdown,
+            isAuthenticated,
+            userDetails: userDetails ? { name: userDetails.name, email: userDetails.email } : null
+        });
+    }, [status, countdown, isAuthenticated, userDetails]);
 
     return (
         <Container maxWidth="sm">
@@ -121,13 +162,16 @@ const VerifyEmailPage = () => {
                                             <strong>Account Details:</strong><br />
                                             Name: {userDetails.name}<br />
                                             Email: {userDetails.email}<br />
-                                            Status: Verified ✓
+                                            Status: Verified & Logged In ✓
                                         </Typography>
                                     </Box>
                                 )}
                                 
                                 <Typography variant="body1" sx={{ mb: 2 }}>
-                                    You are now logged in! Redirecting to home page in {countdown} seconds...
+                                    🎉 You are now logged in! 
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                                    Redirecting to home page in <strong>{countdown}</strong> seconds...
                                 </Typography>
                                 
                                 <Button 
@@ -135,9 +179,16 @@ const VerifyEmailPage = () => {
                                     color="primary" 
                                     onClick={handleGoToHome}
                                     size="large"
+                                    sx={{ mb: 2 }}
                                 >
                                     Go to Home Page Now
                                 </Button>
+                                
+                                <br />
+                                
+                                <Typography variant="caption" color="text.secondary">
+                                    Authentication Status: {isAuthenticated ? '✅ Logged In' : '⏳ Logging In...'}
+                                </Typography>
                             </Box>
                         )}
                         
