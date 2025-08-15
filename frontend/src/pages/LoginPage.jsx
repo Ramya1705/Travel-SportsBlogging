@@ -20,6 +20,7 @@ const LoginPage = () => {
     const [error, setError] = useState('');
     const [currentBg, setCurrentBg] = useState(0);
     const [searchParams] = useSearchParams();
+    // We get the setAuthToken function from our context
     const { login, setAuthToken } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -48,29 +49,26 @@ const LoginPage = () => {
 
         if (token) {
             console.log('✅ Google auth successful, storing token');
+            // The key is to immediately set the token in the context.
+            // This will trigger a re-render in your AuthContext and App.js.
+            setAuthToken(token);
             localStorage.setItem('token', token);
-            
-            // Update auth context if you have setAuthToken method
-            if (setAuthToken) {
-                setAuthToken(token);
-            }
-            
-            // Clear URL params and redirect
-            window.history.replaceState({}, document.title, window.location.pathname);
+
+            // After setting the token in context, we can safely navigate.
+            // The ProtectedRoute will now see the new token and allow the navigation.
             navigate('/');
         } else if (error) {
             console.error('❌ Google auth failed:', error);
             setError(decodeURIComponent(error));
         }
-    }, [searchParams, navigate, setAuthToken]);
+    }, [searchParams, navigate, setAuthToken]); // Added setAuthToken to dependency array for best practice
 
     // Debug token info when page loads
     useEffect(() => {
-        const token =
-            localStorage.getItem('token') ||
+        const token = localStorage.getItem('token') ||
             document.cookie.split('; ')
-                .find(row => row.startsWith('token='))
-                ?.split('=')[1];
+            .find(row => row.startsWith('token='))
+            ?.split('=')[1];
 
         console.log('🔍 Login Page Debug:');
         console.log('Token from localStorage:', localStorage.getItem('token'));
@@ -83,6 +81,8 @@ const LoginPage = () => {
         setError('');
         try {
             await login(email, password);
+            // Assuming the `login` function internally calls `setAuthToken` and handles navigation.
+            // If not, you would add `navigate('/')` here after a successful login.
             navigate('/');
         } catch (err) {
             console.error('Regular login error:', err);
@@ -92,10 +92,10 @@ const LoginPage = () => {
 
     const handleGoogleLogin = () => {
         console.log('🚀 Starting Google authentication...');
-        // Your backend should redirect back to: /login?token=JWT_TOKEN or /login?error=ERROR_MESSAGE
         const redirectUrl = `${window.location.origin}/login`;
+        // Ensure your REACT_APP_API_URL is correctly set in your .env file
         const googleAuthUrl = `${process.env.REACT_APP_API_URL}/auth/google?redirect=${encodeURIComponent(redirectUrl)}`;
-        
+
         console.log('Redirecting to:', googleAuthUrl);
         window.location.href = googleAuthUrl;
     };
@@ -218,4 +218,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
