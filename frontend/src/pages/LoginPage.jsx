@@ -18,10 +18,11 @@ const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const [currentBg, setCurrentBg] = useState(0);
     const [searchParams] = useSearchParams();
-    // We get the setAuthToken function from our context
-    const { login, setAuthToken } = useContext(AuthContext);
+    
+    const { login, setAuthToken, isAuthenticated } = useContext(AuthContext);
     const navigate = useNavigate();
 
     // Travel and sports themed backgrounds
@@ -38,66 +39,170 @@ const LoginPage = () => {
         return () => clearInterval(interval);
     }, [backgrounds.length]);
 
-    // Handle Google auth callback
+    // Redirect if already authenticated
     useEffect(() => {
-        const token = searchParams.get('token');
-        const error = searchParams.get('error');
-
-        console.log('🔍 Google Auth Callback Debug:');
-        console.log('URL token:', token);
-        console.log('URL error:', error);
-
-        if (token) {
-            console.log('✅ Google auth successful, storing token');
-            // The key is to immediately set the token in the context.
-            // This will trigger a re-render in your AuthContext and App.js.
-            setAuthToken(token);
-            localStorage.setItem('token', token);
-
-            // After setting the token in context, we can safely navigate.
-            // The ProtectedRoute will now see the new token and allow the navigation.
+        if (isAuthenticated) {
+            console.log('✅ User is already authenticated, redirecting to home');
             navigate('/');
-        } else if (error) {
-            console.error('❌ Google auth failed:', error);
-            setError(decodeURIComponent(error));
         }
-    }, [searchParams, navigate, setAuthToken]); // Added setAuthToken to dependency array for best practice
+    }, [isAuthenticated, navigate]);
 
-    // Debug token info when page loads
+    // Enhanced token detection function
+    const detectAndSetToken = (token, source) => {
+        if (!token || token === 'null' || token === 'undefined') {
+            console.log(`❌ Invalid token from ${source}:`, token);
+            return false;
+        }
+
+        console.log(`✅ Valid token detected from ${source}:`, token.substring(0, 20) + '...');
+        
+        try {
+            // Store in localStorage
+            localStorage.setItem('token', token);
+            
+            // Set in context (this will trigger AuthContext to re-authenticate)
+            setAuthToken(token);
+            
+            console.log('✅ Token stored and context updated');
+            return true;
+        } catch (error) {
+            console.error('❌ Error storing token:', error);
+            return false;
+        }
+    };
+
+    // Handle Google auth callback and other tokens
     useEffect(() => {
-        const token = localStorage.getItem('token') ||
-            document.cookie.split('; ')
+        const urlToken = searchParams.get('token');
+        const urlError = searchParams.get('error');
+
+        console.log('🔍 LoginPage Token Detection:');
+        console.log('URL token:', urlToken ? 'FOUND' : 'NOT FOUND');
+        console.log('URL error:', urlError);
+
+        // Priority 1: Handle URL token (from Google OAuth redirect)
+        if (urlToken) {
+            console.log('🔐 Processing Google OAuth token from URL');
+            if (detectAndSetToken(urlToken, 'URL parameter')) {
+                // Clear the URL parameters to clean up
+                const newUrl = window.location.pathname;
+                window.history.replaceState({}, document.title, newUrl);
+                
+                // Navigate to home (delay slightly to ensure context update)
+                setTimeout(() => {
+                    navigate('/');
+                }, 100);
+                return;
+            }
+        }
+
+        // Priority 2: Handle URL error
+        if (urlError) {
+            console.error('❌ OAuth error from URL:', urlError);
+            setError(decodeURIComponent(urlError));
+            return;
+        }
+
+        // Priority 3: Check for cookie token (backup method)
+        const cookieToken = document.cookie
+            .split('; ')
             .find(row => row.startsWith('token='))
             ?.split('=')[1];
 
-        console.log('🔍 Login Page Debug:');
-        console.log('Token from localStorage:', localStorage.getItem('token'));
-        console.log('Cookies:', document.cookie);
-        console.log('Final token detected:', token);
-    }, []);
+        if (cookieToken && cookieToken !== localStorage.getItem('token')) {
+            console.log('🔐 Processing token from cookie');
+            detectAndSetToken(cookieToken, 'cookie');
+        }
+
+        // Priority 4: Check localStorage for existing token
+        const storageToken = localStorage.getItem('token');
+        if (storageToken) {
+            console.log('🔐 Token found in localStorage, verifying...');
+            // Let AuthContext handle the verification
+        } else {
+            console.log('ℹ️ No token found in any storage method');
+        }
+
+    }, [searchParams, navigate, setAuthToken]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setLoading(true);
+
         try {
-            await login(email, password);
-            // Assuming the `login` function internally calls `setAuthToken` and handles navigation.
-            // If not, you would add `navigate('/')` here after a successful login.
-            navigate('/');
+            console.log('🔐 Starting regular login process...');
+            console.log('Email:', email);
+            
+            // Use the context login method
+            await login(email.trim().toLowerCase(), password);
+            
+            console.log('✅ Regular login successful');
+            
+            // Check if token was properly stored
+            const storedToken = localStorage.getItem('token');
+            if (storedToken) {
+                console.log('✅ Token confirmed in localStorage');
+                navigate('/');
+            } else {
+                console.error('❌ Login succeeded but no token stored');
+                setError('Login succeeded but authentication failed. Please try again.');
+            }
+            
         } catch (err) {
-            console.error('Regular login error:', err);
-            setError(err.response?.data?.message || 'Failed to login');
+            console.error('❌ Regular login failed:', err);
+            const errorMessage = err.response?.data?.message || 
+                                err.message || 
+                                'Login failed. Please check your credentials.';
+            setError(errorMessage);
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleGoogleLogin = () => {
         console.log('🚀 Starting Google authentication...');
+        setError(''); // Clear any previous errors
+        
+        const currentUrl = window.location.href;
         const redirectUrl = `${window.location.origin}/login`;
-        // Ensure your REACT_APP_API_URL is correctly set in your .env file
-        const googleAuthUrl = `${process.env.REACT_APP_API_URL}/auth/google?redirect=${encodeURIComponent(redirectUrl)}`;
+        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+        const googleAuthUrl = `${apiUrl}/auth/google?redirect=${encodeURIComponent(redirectUrl)}`;
 
-        console.log('Redirecting to:', googleAuthUrl);
+        console.log('Current URL:', currentUrl);
+        console.log('Redirect URL:', redirectUrl);
+        console.log('Google Auth URL:', googleAuthUrl);
+        
+        // Navigate to Google OAuth
         window.location.href = googleAuthUrl;
+    };
+
+    // Debug info component (only show in development)
+    const DebugInfo = () => {
+        if (process.env.NODE_ENV !== 'development') return null;
+
+        const storageToken = localStorage.getItem('token');
+        const cookieToken = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('token='))
+            ?.split('=')[1];
+
+        return (
+            <Box sx={{ mt: 2, p: 2, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+                <Typography variant="caption" display="block">
+                    Debug Info:
+                </Typography>
+                <Typography variant="caption" display="block">
+                    • LocalStorage Token: {storageToken ? '✅ Found' : '❌ Missing'}
+                </Typography>
+                <Typography variant="caption" display="block">
+                    • Cookie Token: {cookieToken ? '✅ Found' : '❌ Missing'}
+                </Typography>
+                <Typography variant="caption" display="block">
+                    • Is Authenticated: {isAuthenticated ? '✅ Yes' : '❌ No'}
+                </Typography>
+            </Box>
+        );
     };
 
     return (
@@ -147,6 +252,7 @@ const LoginPage = () => {
                         <Typography component="h1" variant="h5">
                             Welcome Back!
                         </Typography>
+                        
                         {error && (
                             <Alert severity="error" sx={{ width: '100%', mt: 2 }}>
                                 {error}
@@ -163,6 +269,7 @@ const LoginPage = () => {
                                 autoComplete="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
+                                disabled={loading}
                             />
                             <TextField
                                 margin="normal"
@@ -174,14 +281,21 @@ const LoginPage = () => {
                                 autoComplete="current-password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
+                                disabled={loading}
                             />
                             <Box sx={{ textAlign: 'right', my: 1 }}>
                                 <Link to="/forgot-password" style={{ color: '#1976d2', fontSize: '0.9rem' }}>
                                     Forgot Password?
                                 </Link>
                             </Box>
-                            <Button type="submit" fullWidth variant="contained" sx={{ mt: 2, mb: 2 }}>
-                                Sign In
+                            <Button 
+                                type="submit" 
+                                fullWidth 
+                                variant="contained" 
+                                sx={{ mt: 2, mb: 2 }}
+                                disabled={loading}
+                            >
+                                {loading ? 'Signing In...' : 'Sign In'}
                             </Button>
 
                             <Divider sx={{ my: 2 }}>OR</Divider>
@@ -191,6 +305,7 @@ const LoginPage = () => {
                                 variant="outlined"
                                 startIcon={<GoogleIcon />}
                                 onClick={handleGoogleLogin}
+                                disabled={loading}
                                 sx={{
                                     color: 'rgba(0, 0, 0, 0.87)',
                                     borderColor: 'rgba(0, 0, 0, 0.23)',
@@ -210,6 +325,8 @@ const LoginPage = () => {
                                 </Link>
                             </Typography>
                         </Box>
+
+                        <DebugInfo />
                     </Box>
                 </Paper>
             </Container>
