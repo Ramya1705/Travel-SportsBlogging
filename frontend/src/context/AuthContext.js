@@ -6,89 +6,91 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [token, setToken] = useState(localStorage.getItem('token') || null);
     const [loading, setLoading] = useState(true);
 
     // ====================================
-    // Debugging + Auth Check on Mount
+    // Auth Check on Mount and Token Change
     // ====================================
     useEffect(() => {
         const checkAuth = async () => {
-            // Try to get token from localStorage or cookies
-            const token =
-                localStorage.getItem('token') ||
-                document.cookie
-                    .split('; ')
-                    .find(row => row.startsWith('token='))
-                    ?.split('=')[1];
-
             console.log('🔍 Frontend Debug:');
             console.log('Token from localStorage:', localStorage.getItem('token'));
-            console.log('Cookies:', document.cookie);
-            console.log('Final token used:', token);
-
+            console.log('Token state in context:', token);
+            
             if (token) {
+                // Set the authorization header for all future requests
+                API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
                 try {
-                    const response = await fetch('/api/auth/me', {
-                        method: 'GET',
-                        credentials: 'include', // Important for cookies
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        },
-                    });
-
-                    console.log('Response status:', response.status);
-                    console.log(
-                        'Response headers:',
-                        Object.fromEntries(response.headers)
-                    );
-
-                    if (response.ok) {
-                        const userData = await response.json();
-                        setUser(userData);
-                    } else {
-                        console.warn('Auth failed, clearing token');
-                        localStorage.removeItem('token');
-                        setUser(null);
-                    }
+                    // Use the imported API instance to check user status
+                    const { data } = await API.get('/auth/me');
+                    console.log('User data received:', data);
+                    setUser(data);
                 } catch (error) {
-                    console.error('Auth check error:', error);
+                    console.error('Auth check error:', error.response?.data || error.message);
+                    // If auth fails, clear the token and user state
+                    localStorage.removeItem('token');
+                    setToken(null);
+                    delete API.defaults.headers.common['Authorization'];
                     setUser(null);
                 }
             } else {
+                console.log('No token found, user is not authenticated.');
                 setUser(null);
             }
             setLoading(false);
         };
 
         checkAuth();
-    }, []);
+    }, [token]); // Rerun this effect whenever the token state changes
 
     // ====================================
     // Auth Actions
     // ====================================
+    const setAuthToken = (newToken) => {
+        localStorage.setItem('token', newToken);
+        setToken(newToken);
+    };
+
     const login = async (email, password) => {
-        const { data } = await API.post('/auth/login', { email, password });
-        setUser(data);
+        try {
+            const { data } = await API.post('/auth/login', { email, password });
+            setAuthToken(data.token); // Store the new token
+            setUser(data.user);
+        } catch (err) {
+            console.error('Login error:', err);
+            throw err;
+        }
     };
 
     const register = async (name, email, password) => {
-        const { data } = await API.post('/auth/register', {
-            name,
-            email,
-            password,
-        });
-        setUser(data);
+        try {
+            const { data } = await API.post('/auth/register', { name, email, password });
+            setAuthToken(data.token); // Store the new token
+            setUser(data.user);
+        } catch (err) {
+            console.error('Registration error:', err);
+            throw err;
+        }
     };
 
     const logout = async () => {
-        await API.get('/auth/logout');
-        setUser(null);
+        try {
+            await API.get('/auth/logout');
+        } catch (err) {
+            console.warn('Logout API failed, but clearing local state anyway:', err);
+        } finally {
+            localStorage.removeItem('token');
+            setToken(null);
+            delete API.defaults.headers.common['Authorization'];
+            setUser(null);
+        }
     };
 
     return (
         <AuthContext.Provider
-            value={{ user, setUser, login, register, logout, loading }}
+            value={{ user, token, setAuthToken, login, register, logout, loading }}
         >
             {!loading && children}
         </AuthContext.Provider>
