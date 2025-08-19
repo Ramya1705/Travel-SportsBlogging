@@ -1,10 +1,12 @@
 // src/context/AuthContext.js
-import React, { createContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useState, useEffect, useCallback, useMemo } from 'react';
 import API from '../api/axios';
 
+// Create the authentication context
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+    // State variables to hold authentication information
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -13,9 +15,12 @@ export const AuthProvider = ({ children }) => {
     // ====================================
     // Token Management Utilities
     // ====================================
+    /**
+     * Retrieves a valid authentication token from local or session storage.
+     * Checks multiple common key names for flexibility.
+     */
     const getTokenFromStorage = () => {
         try {
-            // Check multiple possible storage keys
             const tokenKeys = ['token', 'authToken', 'accessToken', 'jwt'];
             for (const key of tokenKeys) {
                 const storedToken = localStorage.getItem(key);
@@ -23,7 +28,6 @@ export const AuthProvider = ({ children }) => {
                     return storedToken;
                 }
             }
-            // Also check sessionStorage as fallback
             for (const key of tokenKeys) {
                 const storedToken = sessionStorage.getItem(key);
                 if (storedToken && storedToken !== 'null' && storedToken !== 'undefined') {
@@ -37,14 +41,16 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    /**
+     * Stores or removes the authentication token from local storage.
+     * Also updates the default Authorization header for API calls.
+     */
     const setTokenToStorage = (newToken) => {
         try {
             if (newToken) {
                 localStorage.setItem('token', newToken);
-                // Set authorization header immediately
                 API.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
             } else {
-                // Clear all possible token keys
                 const tokenKeys = ['token', 'authToken', 'accessToken', 'jwt'];
                 tokenKeys.forEach(key => {
                     localStorage.removeItem(key);
@@ -58,12 +64,16 @@ export const AuthProvider = ({ children }) => {
     };
 
     // ====================================
-    // Auth Check Function
+    // Auth Check Function (Memoized)
     // ====================================
+    /**
+     * Checks if a user is authenticated by validating the stored token with the backend.
+     * This function is wrapped in useCallback to prevent unnecessary re-creations.
+     */
     const checkAuth = useCallback(async () => {
-        console.log('🔍 Enhanced Frontend Debug:');
-        
-        // Get token from storage
+        setLoading(true);
+        console.log('🔍 Enhanced Frontend Debug: Starting authentication check.');
+
         const storedToken = getTokenFromStorage();
         console.log('Token from storage:', storedToken ? 'Found' : 'Not found');
         console.log('Token preview:', storedToken ? `${storedToken.substring(0, 20)}...` : 'null');
@@ -77,7 +87,6 @@ export const AuthProvider = ({ children }) => {
             return;
         }
 
-        // Set token state and authorization header
         setToken(storedToken);
         API.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
 
@@ -91,13 +100,12 @@ export const AuthProvider = ({ children }) => {
                 role: data.role,
                 isVerified: data.isVerified
             });
-            
             setUser(data);
             setIsAuthenticated(true);
         } catch (error) {
             console.error('❌ Auth check error:', error.response?.data || error.message);
             
-            // Handle different error scenarios
+            // Handle specific error codes
             if (error.response?.status === 401) {
                 console.log('Token expired or invalid, clearing auth state');
             } else if (error.response?.status === 403) {
@@ -113,6 +121,7 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(false);
         } finally {
             setLoading(false);
+            console.log('Authentication check finished.');
         }
     }, []);
 
@@ -220,11 +229,11 @@ export const AuthProvider = ({ children }) => {
     // Force re-authentication (useful for debugging)
     const refreshAuth = () => {
         console.log('🔄 Forcing auth refresh...');
-        setLoading(true);
         checkAuth();
     };
 
-    const contextValue = {
+    // Memoize the context value to prevent unnecessary re-renders
+    const contextValue = useMemo(() => ({
         // State
         user,
         token,
@@ -240,7 +249,7 @@ export const AuthProvider = ({ children }) => {
         
         // Utilities (for debugging)
         checkAuth
-    };
+    }), [user, token, loading, isAuthenticated, login, register, logout, setAuthToken, refreshAuth, checkAuth]);
 
     return (
         <AuthContext.Provider value={contextValue}>
