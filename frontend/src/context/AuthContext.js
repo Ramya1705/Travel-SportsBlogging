@@ -1,3 +1,4 @@
+
 import React, { createContext, useState, useEffect, useCallback, useMemo } from 'react';
 import API from '../api/axios';
 
@@ -158,6 +159,9 @@ export const AuthProvider = ({ children }) => {
                 hasUser: !!data.user,
                 userEmail: data.user?.email
             });
+            
+            // FIX: Force a page reload after successful login to ensure UI syncs up
+            window.location.reload();
 
             return data;
         } catch (err) {
