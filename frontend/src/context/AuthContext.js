@@ -150,6 +150,11 @@ export const AuthProvider = ({ children }) => {
                 password 
             });
             
+            // ✅ FIX: Set both the user and authentication state
+            setAuthToken(data.token);
+            setUser(data.user);
+            setIsAuthenticated(true);
+            
             console.log('✅ Login successful:', {
                 hasToken: !!data.token,
                 hasUser: !!data.user,
@@ -159,11 +164,6 @@ export const AuthProvider = ({ children }) => {
             if (!data.token) {
                 throw new Error('No token received from server');
             }
-
-            // Store token and user data
-            setAuthToken(data.token);
-            setUser(data.user);
-            setIsAuthenticated(true);
             
             return data;
         } catch (err) {
@@ -193,6 +193,7 @@ export const AuthProvider = ({ children }) => {
             if (data.token) {
                 setAuthToken(data.token);
                 setUser(data.user);
+                // ✅ FIX: Also set isAuthenticated to true on successful registration
                 setIsAuthenticated(true);
             }
             
