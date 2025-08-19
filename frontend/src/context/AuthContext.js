@@ -1,4 +1,3 @@
-
 import React, { createContext, useState, useEffect, useCallback, useMemo } from 'react';
 import API from '../api/axios';
 
@@ -92,7 +91,7 @@ export const AuthProvider = ({ children }) => {
             return;
         }
         
-        // FIX: Corrected variable name from 'Token' to 'storedToken' and used template literal
+        // Corrected variable name from 'Token' to 'storedToken' and used template literal
         API.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
 
         try {
@@ -160,8 +159,8 @@ export const AuthProvider = ({ children }) => {
                 userEmail: data.user?.email
             });
             
-            // FIX: Force a page reload after successful login to ensure UI syncs up
-            window.location.reload();
+            // FIX: Removed the forceful reload to allow React's state management to handle the UI update.
+            // This is the correct way to handle this in a SPA.
 
             return data;
         } catch (err) {
