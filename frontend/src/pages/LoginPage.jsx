@@ -166,7 +166,7 @@ const LoginPage = () => {
         
         const currentUrl = window.location.href;
         const redirectUrl = `${window.location.origin}/login`;
-        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+        const apiUrl = process.env.REACT_APP_API_URL || 'https://travel-sportsblogging.onrender.com/api';
         const googleAuthUrl = `${apiUrl}/auth/google?redirect=${encodeURIComponent(redirectUrl)}`;
 
         console.log('Current URL:', currentUrl);
