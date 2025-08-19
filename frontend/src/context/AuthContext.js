@@ -1,4 +1,3 @@
-// src/context/AuthContext.js
 import React, { createContext, useState, useEffect, useCallback, useMemo } from 'react';
 import API from '../api/axios';
 
@@ -22,18 +21,23 @@ export const AuthProvider = ({ children }) => {
     const getTokenFromStorage = () => {
         try {
             const tokenKeys = ['token', 'authToken', 'accessToken', 'jwt'];
+            // Check localStorage first
             for (const key of tokenKeys) {
                 const storedToken = localStorage.getItem(key);
                 if (storedToken && storedToken !== 'null' && storedToken !== 'undefined') {
+                    console.log(`Found token in localStorage with key: ${key}`);
                     return storedToken;
                 }
             }
+            // If not found, check sessionStorage
             for (const key of tokenKeys) {
                 const storedToken = sessionStorage.getItem(key);
                 if (storedToken && storedToken !== 'null' && storedToken !== 'undefined') {
+                    console.log(`Found token in sessionStorage with key: ${key}`);
                     return storedToken;
                 }
             }
+            console.log('No token found in storage.');
             return null;
         } catch (error) {
             console.error('Error reading token from storage:', error);
@@ -48,8 +52,9 @@ export const AuthProvider = ({ children }) => {
     const setTokenToStorage = (newToken) => {
         try {
             if (newToken) {
-                localStorage.setItem('token', newToken);
+                localStorage.setItem('token', newToken); // Use a single, consistent key
                 API.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+                console.log('Token set in localStorage and Axios headers.');
             } else {
                 const tokenKeys = ['token', 'authToken', 'accessToken', 'jwt'];
                 tokenKeys.forEach(key => {
@@ -57,6 +62,7 @@ export const AuthProvider = ({ children }) => {
                     sessionStorage.removeItem(key);
                 });
                 delete API.defaults.headers.common['Authorization'];
+                console.log('Tokens and Axios headers cleared.');
             }
         } catch (error) {
             console.error('Error setting token to storage:', error);
@@ -72,14 +78,12 @@ export const AuthProvider = ({ children }) => {
      */
     const checkAuth = useCallback(async () => {
         setLoading(true);
-        console.log('🔍 Enhanced Frontend Debug: Starting authentication check.');
+        console.log('🔍 Starting authentication check.');
 
         const storedToken = getTokenFromStorage();
-        console.log('Token from storage:', storedToken ? 'Found' : 'Not found');
-        console.log('Token preview:', storedToken ? `${storedToken.substring(0, 20)}...` : 'null');
 
         if (!storedToken) {
-            console.log('No valid token found, user is not authenticated.');
+            console.log('No valid token found. User is not authenticated.');
             setUser(null);
             setToken(null);
             setIsAuthenticated(false);
@@ -87,43 +91,37 @@ export const AuthProvider = ({ children }) => {
             return;
         }
 
-        setToken(storedToken);
-        API.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+        API.defaults.headers.common['Authorization'] = `Bearer ${Token}`;
 
         try {
             console.log('Attempting to validate token with backend...');
             const { data } = await API.get('/auth/me');
-            console.log('✅ User data received:', {
-                id: data._id,
-                name: data.name,
-                email: data.email,
-                role: data.role,
-                isVerified: data.isVerified
-            });
+            console.log('✅ User data received:', data);
+
+            // Update state after successful validation
             setUser(data);
+            setToken(storedToken); // Set token state from storage
             setIsAuthenticated(true);
         } catch (error) {
             console.error('❌ Auth check error:', error.response?.data || error.message);
-            
+
             // Handle specific error codes
             if (error.response?.status === 401) {
                 console.log('Token expired or invalid, clearing auth state');
-            } else if (error.response?.status === 403) {
-                console.log('Access forbidden, user may be deactivated');
             } else {
-                console.log('Network or server error during auth check');
+                console.log('Network or server error during auth check. Clearing auth state.');
             }
-            
+
             // Clear invalid token and user state
             setTokenToStorage(null);
-            setToken(null);
             setUser(null);
+            setToken(null);
             setIsAuthenticated(false);
         } finally {
             setLoading(false);
             console.log('Authentication check finished.');
         }
-    }, []);
+    }, [token]); // Add 'token' as a dependency
 
     // ====================================
     // Initialize Auth on Mount
@@ -135,68 +133,69 @@ export const AuthProvider = ({ children }) => {
     // ====================================
     // Auth Actions
     // ====================================
-    const setAuthToken = (newToken) => {
-        setTokenToStorage(newToken);
-        setToken(newToken);
-    };
-
-    const login = async (email, password) => {
+    /**
+     * Handles user login, setting token and user state on success.
+     * @param {string} email - The user's email.
+     * @param {string} password - The user's password.
+     */
+    const login = useCallback(async (email, password) => {
         try {
-            console.log('🔐 Attempting login for:', email);
             setLoading(true);
-            
-            const { data } = await API.post('/auth/login', { 
-                email: email.trim().toLowerCase(), 
-                password 
+            const { data } = await API.post('/auth/login', {
+                email: email.trim().toLowerCase(),
+                password
             });
-            
-            // ✅ FIX: Set both the user and authentication state
-            setAuthToken(data.token);
+
+            // Set all authentication states in a single block for consistency
             setUser(data.user);
+            setToken(data.token);
             setIsAuthenticated(true);
-            
+            setTokenToStorage(data.token);
+
             console.log('✅ Login successful:', {
                 hasToken: !!data.token,
                 hasUser: !!data.user,
                 userEmail: data.user?.email
             });
 
-            if (!data.token) {
-                throw new Error('No token received from server');
-            }
-            
             return data;
         } catch (err) {
             console.error('❌ Login error:', err.response?.data || err.message);
+            // Clear all states on error
             setUser(null);
             setToken(null);
             setIsAuthenticated(false);
+            setTokenToStorage(null); // Clear storage on failed login
             throw err;
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    const register = async (name, email, password) => {
+    /**
+     * Handles user registration and sets auth state on success.
+     * @param {string} name - The user's name.
+     * @param {string} email - The user's email.
+     * @param {string} password - The user's password.
+     */
+    const register = useCallback(async (name, email, password) => {
         try {
-            console.log('📝 Attempting registration for:', email);
             setLoading(true);
-            
-            const { data } = await API.post('/auth/register', { 
-                name: name.trim(), 
-                email: email.trim().toLowerCase(), 
-                password 
+            const { data } = await API.post('/auth/register', {
+                name: name.trim(),
+                email: email.trim().toLowerCase(),
+                password
             });
-            
-            console.log('✅ Registration successful');
 
             if (data.token) {
-                setAuthToken(data.token);
+                // Set all authentication states in a single block
+                setToken(data.token);
                 setUser(data.user);
-                // ✅ FIX: Also set isAuthenticated to true on successful registration
                 setIsAuthenticated(true);
+                setTokenToStorage(data.token);
             }
-            
+
+            console.log('✅ Registration successful');
             return data;
         } catch (err) {
             console.error('❌ Registration error:', err.response?.data || err.message);
@@ -204,34 +203,28 @@ export const AuthProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    const logout = async () => {
+    /**
+     * Logs the user out and clears all authentication state.
+     */
+    const logout = useCallback(async () => {
         try {
-            console.log('🚪 Logging out...');
             setLoading(true);
-            
-            // Try to call logout endpoint
             await API.get('/auth/logout');
             console.log('✅ Logout API call successful');
         } catch (err) {
             console.warn('⚠️ Logout API failed, but clearing local state anyway:', err.message);
         } finally {
             // Always clear local state regardless of API success
-            setTokenToStorage(null);
-            setToken(null);
             setUser(null);
+            setToken(null);
             setIsAuthenticated(false);
+            setTokenToStorage(null);
             setLoading(false);
             console.log('✅ Local auth state cleared');
         }
-    };
-
-    // Force re-authentication (useful for debugging)
-    const refreshAuth = () => {
-        console.log('🔄 Forcing auth refresh...');
-        checkAuth();
-    };
+    }, []);
 
     // Memoize the context value to prevent unnecessary re-renders
     const contextValue = useMemo(() => ({
@@ -240,20 +233,20 @@ export const AuthProvider = ({ children }) => {
         token,
         loading,
         isAuthenticated,
-        
+
         // Actions
         login,
         register,
         logout,
-        setAuthToken,
-        refreshAuth,
-        
-        // Utilities (for debugging)
-        checkAuth
-    }), [user, token, loading, isAuthenticated, login, register, logout, setAuthToken, refreshAuth, checkAuth]);
+
+        // Utilities
+        setTokenToStorage,
+        checkAuth,
+    }), [user, token, loading, isAuthenticated, login, register, logout, checkAuth]);
 
     return (
         <AuthContext.Provider value={contextValue}>
+            {/* Only render children when the initial authentication check is complete */}
             {!loading && children}
         </AuthContext.Provider>
     );
