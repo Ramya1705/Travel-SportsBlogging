@@ -90,8 +90,9 @@ export const AuthProvider = ({ children }) => {
             setLoading(false);
             return;
         }
-
-        API.defaults.headers.common['Authorization'] = `Bearer ${Token}`;
+        
+        // FIX: Corrected variable name from 'Token' to 'storedToken' and used template literal
+        API.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
 
         try {
             console.log('Attempting to validate token with backend...');
@@ -121,7 +122,7 @@ export const AuthProvider = ({ children }) => {
             setLoading(false);
             console.log('Authentication check finished.');
         }
-    }, [token]); // Add 'token' as a dependency
+    }, []);
 
     // ====================================
     // Initialize Auth on Mount
