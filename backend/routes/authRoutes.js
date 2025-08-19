@@ -219,7 +219,7 @@ router.get(
 
         } catch (error) {
             console.error('❌ Google OAuth callback error:', error);
-            const errorUrl = `${process.env.CLIENT_URL || 'http://localhost:3000'}/login?error=OAuth%20processing%20failed`;
+            const errorUrl = `${process.env.CLIENT_URL || 'https://travel-sports-blogging.onrender.com'}/login?error=OAuth%20processing%20failed`;
             res.redirect(errorUrl);
         }
     }
