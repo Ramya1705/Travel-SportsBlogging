@@ -40,7 +40,7 @@ const LoginPage = () => {
     }, [backgrounds.length]);
 
     // Enhanced token detection function
-    const detectAndSetToken = (token, source) => {
+    const detectAndSetToken = async (token, source) => {
         if (!token || token === 'null' || token === 'undefined') {
             console.log(`❌ Invalid token from ${source}:`, token);
             return false;
@@ -49,12 +49,8 @@ const LoginPage = () => {
         console.log(`✅ Valid token detected from ${source}:`, token.substring(0, 20) + '...');
         
         try {
-            // Store in localStorage
-            localStorage.setItem('token', token);
-            
-            // Set in context (this will trigger AuthContext to re-authenticate)
-            setAuthToken(token);
-            
+            // Use the context method to set token and validate immediately
+            await setAuthToken(token);
             console.log('✅ Token stored and context updated');
             return true;
         } catch (error) {
@@ -75,16 +71,18 @@ const LoginPage = () => {
         // Priority 1: Handle URL token (from Google OAuth redirect)
         if (urlToken) {
             console.log('🔐 Processing Google OAuth token from URL');
-            if (detectAndSetToken(urlToken, 'URL parameter')) {
-                // Clear the URL parameters to clean up
-                const newUrl = window.location.pathname;
-                window.history.replaceState({}, document.title, newUrl);
-                
-                // ✅ IMMEDIATE REDIRECT after Google OAuth
-                console.log('🔄 Redirecting after Google OAuth...');
-                navigate('/', { replace: true });
-                return;
-            }
+            detectAndSetToken(urlToken, 'URL parameter').then((success) => {
+                if (success) {
+                    // Clear the URL parameters to clean up
+                    const newUrl = window.location.pathname;
+                    window.history.replaceState({}, document.title, newUrl);
+                    
+                    // ✅ IMMEDIATE REDIRECT after Google OAuth
+                    console.log('🔄 Redirecting after Google OAuth...');
+                    navigate('/', { replace: true });
+                }
+            });
+            return;
         }
 
         // Priority 2: Handle URL error
@@ -102,10 +100,12 @@ const LoginPage = () => {
 
         if (cookieToken && cookieToken !== localStorage.getItem('token')) {
             console.log('🔐 Processing token from cookie');
-            if (detectAndSetToken(cookieToken, 'cookie')) {
-                console.log('🔄 Redirecting after cookie token detection...');
-                navigate('/', { replace: true });
-            }
+            detectAndSetToken(cookieToken, 'cookie').then((success) => {
+                if (success) {
+                    console.log('🔄 Redirecting after cookie token detection...');
+                    navigate('/', { replace: true });
+                }
+            });
         }
 
         // Priority 4: Check localStorage for existing token
@@ -119,10 +119,10 @@ const LoginPage = () => {
 
     }, [searchParams, navigate, setAuthToken]);
 
-    // Backup authentication check - redirect if already authenticated
+    // Redirect if already authenticated - this will now work immediately after login
     useEffect(() => {
         if (isAuthenticated) {
-            console.log('✅ User is already authenticated via useEffect, redirecting to home');
+            console.log('✅ User is authenticated, redirecting to home');
             navigate('/', { replace: true });
         }
     }, [isAuthenticated, navigate]);
@@ -142,19 +142,9 @@ const LoginPage = () => {
             console.log('✅ Regular login successful');
             console.log('Login result:', loginResult);
             
-            // Check if token was properly stored
-            const storedToken = localStorage.getItem('token');
-            if (storedToken) {
-                console.log('✅ Token confirmed in localStorage');
-                
-                // ✅ IMMEDIATE REDIRECT - Don't wait for isAuthenticated state
-                console.log('🔄 Redirecting to home page...');
-                navigate('/', { replace: true });
-                console.log('🔄 Navigate function called - should redirect now');
-            } else {
-                console.error('❌ Login succeeded but no token stored');
-                setError('Login succeeded but authentication failed. Please try again.');
-            }
+            // The isAuthenticated state should now be updated immediately
+            // The useEffect above will handle the redirect
+            console.log('🔄 Login completed, waiting for auth state update...');
             
         } catch (err) {
             console.error('❌ Regular login failed:', err);
