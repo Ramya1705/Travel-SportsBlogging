@@ -49,10 +49,14 @@ const LoginPage = () => {
         console.log(`✅ Valid token detected from ${source}:`, token.substring(0, 20) + '...');
         
         try {
-            // Use the context method to set token and validate immediately
-            await setAuthToken(token);
-            console.log('✅ Token stored and context updated');
-            return true;
+            const success = await setAuthToken(token);
+            if (success) {
+                console.log('✅ Token stored and context updated');
+                return true;
+            } else {
+                console.error('❌ Token validation failed');
+                return false;
+            }
         } catch (error) {
             console.error('❌ Error storing token:', error);
             return false;
@@ -77,9 +81,8 @@ const LoginPage = () => {
                     const newUrl = window.location.pathname;
                     window.history.replaceState({}, document.title, newUrl);
                     
-                    // ✅ IMMEDIATE REDIRECT after Google OAuth
-                    console.log('🔄 Redirecting after Google OAuth...');
-                    navigate('/', { replace: true });
+                    // Redirect will be handled by the isAuthenticated useEffect
+                    console.log('🔄 Google OAuth successful, will redirect...');
                 }
             });
             return;
@@ -100,26 +103,12 @@ const LoginPage = () => {
 
         if (cookieToken && cookieToken !== localStorage.getItem('token')) {
             console.log('🔐 Processing token from cookie');
-            detectAndSetToken(cookieToken, 'cookie').then((success) => {
-                if (success) {
-                    console.log('🔄 Redirecting after cookie token detection...');
-                    navigate('/', { replace: true });
-                }
-            });
+            detectAndSetToken(cookieToken, 'cookie');
         }
 
-        // Priority 4: Check localStorage for existing token
-        const storageToken = localStorage.getItem('token');
-        if (storageToken) {
-            console.log('🔐 Token found in localStorage, verifying...');
-            // Let AuthContext handle the verification
-        } else {
-            console.log('ℹ️ No token found in any storage method');
-        }
+    }, [searchParams, setAuthToken]);
 
-    }, [searchParams, navigate, setAuthToken]);
-
-    // Redirect if already authenticated - this will now work immediately after login
+    // Redirect if already authenticated - This handles immediate redirect after login
     useEffect(() => {
         if (isAuthenticated) {
             console.log('✅ User is authenticated, redirecting to home');
@@ -136,22 +125,25 @@ const LoginPage = () => {
             console.log('🔐 Starting regular login process...');
             console.log('Email:', email);
             
-            // Use the context login method
-            const loginResult = await login(email.trim().toLowerCase(), password);
+            // Use the context login method - it now returns success/error object
+            const result = await login(email.trim().toLowerCase(), password);
             
-            console.log('✅ Regular login successful');
-            console.log('Login result:', loginResult);
-            
-            // The isAuthenticated state should now be updated immediately
-            // The useEffect above will handle the redirect
-            console.log('🔄 Login completed, waiting for auth state update...');
+            if (result.success) {
+                console.log('✅ Regular login successful');
+                console.log('Login result:', result);
+                
+                // isAuthenticated should now be true, triggering the redirect useEffect
+                // No need to manually navigate - the useEffect will handle it
+                console.log('🔄 Login completed successfully');
+            } else {
+                console.error('❌ Login failed:', result.error);
+                setError(result.error);
+            }
             
         } catch (err) {
-            console.error('❌ Regular login failed:', err);
-            const errorMessage = err.response?.data?.message || 
-                                err.message || 
-                                'Login failed. Please check your credentials.';
-            setError(errorMessage);
+            // This should rarely happen now since login returns success/error object
+            console.error('❌ Unexpected login error:', err);
+            setError('An unexpected error occurred. Please try again.');
         } finally {
             setLoading(false);
         }
