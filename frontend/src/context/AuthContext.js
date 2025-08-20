@@ -69,6 +69,46 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    /**
+     * Manually set auth token and trigger immediate state update
+     * This is used for external token setting (like Google OAuth)
+     */
+    const setAuthToken = useCallback(async (newToken) => {
+        if (!newToken || newToken === 'null' || newToken === 'undefined') {
+            console.log('Invalid token provided to setAuthToken');
+            return;
+        }
+
+        console.log('🔐 Setting auth token and validating...');
+        
+        // Set token storage first
+        setTokenToStorage(newToken);
+        setToken(newToken);
+        
+        // Set auth header for API calls
+        API.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+
+        try {
+            // Validate token immediately
+            const { data } = await API.get('/auth/me');
+            console.log('✅ Token validated, user data received:', data);
+            
+            // Update all auth states immediately
+            setUser(data);
+            setIsAuthenticated(true);
+            setLoading(false); // Ensure loading is false
+            
+        } catch (error) {
+            console.error('❌ Token validation failed:', error.response?.data || error.message);
+            
+            // Clear invalid token
+            setTokenToStorage(null);
+            setUser(null);
+            setToken(null);
+            setIsAuthenticated(false);
+        }
+    }, []);
+
     // ====================================
     // Auth Check Function (Memoized)
     // ====================================
@@ -91,7 +131,7 @@ export const AuthProvider = ({ children }) => {
             return;
         }
         
-        // Corrected variable name from 'Token' to 'storedToken' and used template literal
+        // Set auth header for API calls
         API.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
 
         try {
@@ -141,26 +181,27 @@ export const AuthProvider = ({ children }) => {
      */
     const login = useCallback(async (email, password) => {
         try {
-            setLoading(true);
+            // Don't set loading to true here - it prevents immediate UI updates
+            console.log('🔐 Starting login process...');
+            
             const { data } = await API.post('/auth/login', {
                 email: email.trim().toLowerCase(),
                 password
             });
 
-            // Set all authentication states in a single block for consistency
+            console.log('✅ Login API successful:', data);
+
+            // Set all authentication states immediately and synchronously
             setUser(data.user);
             setToken(data.token);
             setIsAuthenticated(true);
             setTokenToStorage(data.token);
 
-            console.log('✅ Login successful:', {
+            console.log('✅ Login successful - Auth state updated:', {
                 hasToken: !!data.token,
                 hasUser: !!data.user,
                 userEmail: data.user?.email
             });
-            
-            // FIX: Removed the forceful reload to allow React's state management to handle the UI update.
-            // This is the correct way to handle this in a SPA.
 
             return data;
         } catch (err) {
@@ -171,8 +212,6 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(false);
             setTokenToStorage(null); // Clear storage on failed login
             throw err;
-        } finally {
-            setLoading(false);
         }
     }, []);
 
@@ -184,7 +223,8 @@ export const AuthProvider = ({ children }) => {
      */
     const register = useCallback(async (name, email, password) => {
         try {
-            setLoading(true);
+            console.log('🔐 Starting registration process...');
+            
             const { data } = await API.post('/auth/register', {
                 name: name.trim(),
                 email: email.trim().toLowerCase(),
@@ -192,7 +232,7 @@ export const AuthProvider = ({ children }) => {
             });
 
             if (data.token) {
-                // Set all authentication states in a single block
+                // Set all authentication states immediately
                 setToken(data.token);
                 setUser(data.user);
                 setIsAuthenticated(true);
@@ -204,8 +244,6 @@ export const AuthProvider = ({ children }) => {
         } catch (err) {
             console.error('❌ Registration error:', err.response?.data || err.message);
             throw err;
-        } finally {
-            setLoading(false);
         }
     }, []);
 
@@ -242,16 +280,17 @@ export const AuthProvider = ({ children }) => {
         login,
         register,
         logout,
+        setAuthToken, // Add this new method
 
         // Utilities
         setTokenToStorage,
         checkAuth,
-    }), [user, token, loading, isAuthenticated, login, register, logout, checkAuth]);
+    }), [user, token, loading, isAuthenticated, login, register, logout, setAuthToken, checkAuth]);
 
     return (
         <AuthContext.Provider value={contextValue}>
-            {/* Only render children when the initial authentication check is complete */}
-            {!loading && children}
+            {/* Always render children - let components handle loading states individually */}
+            {children}
         </AuthContext.Provider>
     );
 };
