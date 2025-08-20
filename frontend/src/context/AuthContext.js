@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }) => {
     const setAuthToken = useCallback(async (newToken) => {
         if (!newToken || newToken === 'null' || newToken === 'undefined') {
             console.log('Invalid token provided to setAuthToken');
-            return;
+            return false;
         }
 
         console.log('🔐 Setting auth token and validating...');
@@ -98,6 +98,8 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(true);
             setLoading(false); // Ensure loading is false
             
+            return true;
+            
         } catch (error) {
             console.error('❌ Token validation failed:', error.response?.data || error.message);
             
@@ -106,6 +108,7 @@ export const AuthProvider = ({ children }) => {
             setUser(null);
             setToken(null);
             setIsAuthenticated(false);
+            return false;
         }
     }, []);
 
@@ -178,10 +181,10 @@ export const AuthProvider = ({ children }) => {
      * Handles user login, setting token and user state on success.
      * @param {string} email - The user's email.
      * @param {string} password - The user's password.
+     * @returns {Promise<{success: boolean, user?: object, token?: string, error?: string}>}
      */
     const login = useCallback(async (email, password) => {
         try {
-            // Don't set loading to true here - it prevents immediate UI updates
             console.log('🔐 Starting login process...');
             
             const { data } = await API.post('/auth/login', {
@@ -203,15 +206,27 @@ export const AuthProvider = ({ children }) => {
                 userEmail: data.user?.email
             });
 
-            return data;
+            // Return success with user data
+            return {
+                success: true,
+                user: data.user,
+                token: data.token
+            };
+            
         } catch (err) {
             console.error('❌ Login error:', err.response?.data || err.message);
+            
             // Clear all states on error
             setUser(null);
             setToken(null);
             setIsAuthenticated(false);
-            setTokenToStorage(null); // Clear storage on failed login
-            throw err;
+            setTokenToStorage(null);
+            
+            // Return error instead of throwing
+            return {
+                success: false,
+                error: err.response?.data?.message || err.message || 'Login failed'
+            };
         }
     }, []);
 
@@ -240,10 +255,17 @@ export const AuthProvider = ({ children }) => {
             }
 
             console.log('✅ Registration successful');
-            return data;
+            return {
+                success: true,
+                user: data.user,
+                token: data.token
+            };
         } catch (err) {
             console.error('❌ Registration error:', err.response?.data || err.message);
-            throw err;
+            return {
+                success: false,
+                error: err.response?.data?.message || err.message || 'Registration failed'
+            };
         }
     }, []);
 
@@ -280,7 +302,7 @@ export const AuthProvider = ({ children }) => {
         login,
         register,
         logout,
-        setAuthToken, // Add this new method
+        setAuthToken,
 
         // Utilities
         setTokenToStorage,
@@ -289,7 +311,6 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={contextValue}>
-            {/* Always render children - let components handle loading states individually */}
             {children}
         </AuthContext.Provider>
     );
