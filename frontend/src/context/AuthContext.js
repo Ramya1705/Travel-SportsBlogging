@@ -70,6 +70,28 @@ export const AuthProvider = ({ children }) => {
     };
 
     /**
+     * Update authentication state immediately without API call
+     */
+    const updateAuthStateImmediate = useCallback((userData, userToken) => {
+        console.log('🚀 Updating auth state immediately:', { 
+            hasUser: !!userData, 
+            hasToken: !!userToken,
+            userEmail: userData?.email 
+        });
+
+        setUser(userData);
+        setToken(userToken);
+        setIsAuthenticated(!!userData && !!userToken);
+        setLoading(false);
+        
+        if (userToken) {
+            setTokenToStorage(userToken);
+        }
+
+        console.log('✅ Auth state updated - isAuthenticated:', !!userData && !!userToken);
+    }, []);
+
+    /**
      * Manually set auth token and trigger immediate state update
      * This is used for external token setting (like Google OAuth)
      */
@@ -94,9 +116,7 @@ export const AuthProvider = ({ children }) => {
             console.log('✅ Token validated, user data received:', data);
             
             // Update all auth states immediately
-            setUser(data);
-            setIsAuthenticated(true);
-            setLoading(false); // Ensure loading is false
+            updateAuthStateImmediate(data, newToken);
             
             return true;
             
@@ -110,16 +130,23 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(false);
             return false;
         }
-    }, []);
+    }, [updateAuthStateImmediate]);
 
     // ====================================
-    // Auth Check Function (Memoized)
+    // Auth Check Function (Memoized) - ONLY RUNS ON MOUNT
     // ====================================
     /**
      * Checks if a user is authenticated by validating the stored token with the backend.
      * This function is wrapped in useCallback to prevent unnecessary re-creations.
      */
     const checkAuth = useCallback(async () => {
+        // Only run if we don't already have a validated user
+        if (user && isAuthenticated) {
+            console.log('✅ User already authenticated, skipping auth check');
+            setLoading(false);
+            return;
+        }
+
         setLoading(true);
         console.log('🔍 Starting authentication check.');
 
@@ -143,9 +170,8 @@ export const AuthProvider = ({ children }) => {
             console.log('✅ User data received:', data);
 
             // Update state after successful validation
-            setUser(data);
-            setToken(storedToken); // Set token state from storage
-            setIsAuthenticated(true);
+            updateAuthStateImmediate(data, storedToken);
+            
         } catch (error) {
             console.error('❌ Auth check error:', error.response?.data || error.message);
 
@@ -161,18 +187,16 @@ export const AuthProvider = ({ children }) => {
             setUser(null);
             setToken(null);
             setIsAuthenticated(false);
-        } finally {
             setLoading(false);
-            console.log('Authentication check finished.');
         }
-    }, []);
+    }, []); // Empty dependency array - only runs on mount
 
     // ====================================
-    // Initialize Auth on Mount
+    // Initialize Auth on Mount ONLY
     // ====================================
     useEffect(() => {
         checkAuth();
-    }, [checkAuth]);
+    }, []); // Empty dependency array
 
     // ====================================
     // Auth Actions
@@ -194,17 +218,10 @@ export const AuthProvider = ({ children }) => {
 
             console.log('✅ Login API successful:', data);
 
-            // Set all authentication states immediately and synchronously
-            setUser(data.user);
-            setToken(data.token);
-            setIsAuthenticated(true);
-            setTokenToStorage(data.token);
+            // IMMEDIATELY update authentication state - this is the key fix
+            updateAuthStateImmediate(data.user, data.token);
 
-            console.log('✅ Login successful - Auth state updated:', {
-                hasToken: !!data.token,
-                hasUser: !!data.user,
-                userEmail: data.user?.email
-            });
+            console.log('✅ Login successful - Auth state updated immediately');
 
             // Return success with user data
             return {
@@ -217,10 +234,7 @@ export const AuthProvider = ({ children }) => {
             console.error('❌ Login error:', err.response?.data || err.message);
             
             // Clear all states on error
-            setUser(null);
-            setToken(null);
-            setIsAuthenticated(false);
-            setTokenToStorage(null);
+            updateAuthStateImmediate(null, null);
             
             // Return error instead of throwing
             return {
@@ -228,7 +242,7 @@ export const AuthProvider = ({ children }) => {
                 error: err.response?.data?.message || err.message || 'Login failed'
             };
         }
-    }, []);
+    }, [updateAuthStateImmediate]);
 
     /**
      * Handles user registration and sets auth state on success.
@@ -248,10 +262,7 @@ export const AuthProvider = ({ children }) => {
 
             if (data.token) {
                 // Set all authentication states immediately
-                setToken(data.token);
-                setUser(data.user);
-                setIsAuthenticated(true);
-                setTokenToStorage(data.token);
+                updateAuthStateImmediate(data.user, data.token);
             }
 
             console.log('✅ Registration successful');
@@ -267,7 +278,7 @@ export const AuthProvider = ({ children }) => {
                 error: err.response?.data?.message || err.message || 'Registration failed'
             };
         }
-    }, []);
+    }, [updateAuthStateImmediate]);
 
     /**
      * Logs the user out and clears all authentication state.
@@ -281,14 +292,10 @@ export const AuthProvider = ({ children }) => {
             console.warn('⚠️ Logout API failed, but clearing local state anyway:', err.message);
         } finally {
             // Always clear local state regardless of API success
-            setUser(null);
-            setToken(null);
-            setIsAuthenticated(false);
-            setTokenToStorage(null);
-            setLoading(false);
+            updateAuthStateImmediate(null, null);
             console.log('✅ Local auth state cleared');
         }
-    }, []);
+    }, [updateAuthStateImmediate]);
 
     // Memoize the context value to prevent unnecessary re-renders
     const contextValue = useMemo(() => ({
@@ -308,6 +315,17 @@ export const AuthProvider = ({ children }) => {
         setTokenToStorage,
         checkAuth,
     }), [user, token, loading, isAuthenticated, login, register, logout, setAuthToken, checkAuth]);
+
+    // Debug logs for state changes
+    useEffect(() => {
+        console.log('🔄 Auth state changed:', {
+            hasUser: !!user,
+            hasToken: !!token,
+            isAuthenticated,
+            loading,
+            userEmail: user?.email
+        });
+    }, [user, token, isAuthenticated, loading]);
 
     return (
         <AuthContext.Provider value={contextValue}>
