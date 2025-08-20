@@ -22,7 +22,7 @@ const LoginPage = () => {
     const [currentBg, setCurrentBg] = useState(0);
     const [searchParams] = useSearchParams();
     
-    const { login, setAuthToken, isAuthenticated } = useContext(AuthContext);
+    const { login, setAuthToken, isAuthenticated, user } = useContext(AuthContext);
     const navigate = useNavigate();
 
     // Travel and sports themed backgrounds
@@ -39,50 +39,36 @@ const LoginPage = () => {
         return () => clearInterval(interval);
     }, [backgrounds.length]);
 
-    // Enhanced token detection function
-    const detectAndSetToken = async (token, source) => {
-        if (!token || token === 'null' || token === 'undefined') {
-            console.log(`❌ Invalid token from ${source}:`, token);
-            return false;
-        }
+    // MAIN REDIRECT LOGIC - Watch for authentication changes
+    useEffect(() => {
+        console.log('🔍 Auth state check:', { 
+            isAuthenticated, 
+            hasUser: !!user, 
+            userEmail: user?.email 
+        });
 
-        console.log(`✅ Valid token detected from ${source}:`, token.substring(0, 20) + '...');
-        
-        try {
-            const success = await setAuthToken(token);
-            if (success) {
-                console.log('✅ Token stored and context updated');
-                return true;
-            } else {
-                console.error('❌ Token validation failed');
-                return false;
-            }
-        } catch (error) {
-            console.error('❌ Error storing token:', error);
-            return false;
+        if (isAuthenticated && user) {
+            console.log('✅ User is fully authenticated, redirecting to home');
+            navigate('/', { replace: true });
         }
-    };
+    }, [isAuthenticated, user, navigate]);
 
     // Handle Google auth callback and other tokens
     useEffect(() => {
         const urlToken = searchParams.get('token');
         const urlError = searchParams.get('error');
 
-        console.log('🔍 LoginPage Token Detection:');
-        console.log('URL token:', urlToken ? 'FOUND' : 'NOT FOUND');
-        console.log('URL error:', urlError);
-
         // Priority 1: Handle URL token (from Google OAuth redirect)
         if (urlToken) {
             console.log('🔐 Processing Google OAuth token from URL');
-            detectAndSetToken(urlToken, 'URL parameter').then((success) => {
+            setAuthToken(urlToken).then((success) => {
                 if (success) {
-                    // Clear the URL parameters to clean up
+                    // Clear the URL parameters
                     const newUrl = window.location.pathname;
                     window.history.replaceState({}, document.title, newUrl);
-                    
-                    // Redirect will be handled by the isAuthenticated useEffect
-                    console.log('🔄 Google OAuth successful, will redirect...');
+                    console.log('🔄 Google OAuth successful');
+                } else {
+                    setError('Google authentication failed. Please try again.');
                 }
             });
             return;
@@ -103,18 +89,10 @@ const LoginPage = () => {
 
         if (cookieToken && cookieToken !== localStorage.getItem('token')) {
             console.log('🔐 Processing token from cookie');
-            detectAndSetToken(cookieToken, 'cookie');
+            setAuthToken(cookieToken);
         }
 
     }, [searchParams, setAuthToken]);
-
-    // Redirect if already authenticated - This handles immediate redirect after login
-    useEffect(() => {
-        if (isAuthenticated) {
-            console.log('✅ User is authenticated, redirecting to home');
-            navigate('/', { replace: true });
-        }
-    }, [isAuthenticated, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -123,25 +101,20 @@ const LoginPage = () => {
 
         try {
             console.log('🔐 Starting regular login process...');
-            console.log('Email:', email);
             
-            // Use the context login method - it now returns success/error object
+            // Use the context login method
             const result = await login(email.trim().toLowerCase(), password);
             
             if (result.success) {
-                console.log('✅ Regular login successful');
-                console.log('Login result:', result);
-                
-                // isAuthenticated should now be true, triggering the redirect useEffect
-                // No need to manually navigate - the useEffect will handle it
-                console.log('🔄 Login completed successfully');
+                console.log('✅ Login successful - result:', result);
+                // Don't navigate here - let the useEffect handle it
+                // The auth state should be updated immediately in the context
             } else {
                 console.error('❌ Login failed:', result.error);
                 setError(result.error);
             }
             
         } catch (err) {
-            // This should rarely happen now since login returns success/error object
             console.error('❌ Unexpected login error:', err);
             setError('An unexpected error occurred. Please try again.');
         } finally {
@@ -151,48 +124,33 @@ const LoginPage = () => {
 
     const handleGoogleLogin = () => {
         console.log('🚀 Starting Google authentication...');
-        setError(''); // Clear any previous errors
+        setError('');
         
-        const currentUrl = window.location.href;
         const redirectUrl = `${window.location.origin}/login`;
         const apiUrl = process.env.REACT_APP_API_URL || 'https://travel-sportsblogging.onrender.com/api';
         const googleAuthUrl = `${apiUrl}/auth/google?redirect=${encodeURIComponent(redirectUrl)}`;
 
-        console.log('Current URL:', currentUrl);
-        console.log('Redirect URL:', redirectUrl);
         console.log('Google Auth URL:', googleAuthUrl);
         
         // Navigate to Google OAuth
         window.location.href = googleAuthUrl;
     };
 
-    // Debug info component (only show in development)
-    const DebugInfo = () => {
-        if (process.env.NODE_ENV !== 'development') return null;
-
-        const storageToken = localStorage.getItem('token');
-        const cookieToken = document.cookie
-            .split('; ')
-            .find(row => row.startsWith('token='))
-            ?.split('=')[1];
-
+    // Show loading state if we're in the middle of processing authentication
+    if (isAuthenticated && user) {
         return (
-            <Box sx={{ mt: 2, p: 2, bgcolor: '#f5f5f5', borderRadius: 1 }}>
-                <Typography variant="caption" display="block">
-                    Debug Info:
-                </Typography>
-                <Typography variant="caption" display="block">
-                    • LocalStorage Token: {storageToken ? '✅ Found' : '❌ Missing'}
-                </Typography>
-                <Typography variant="caption" display="block">
-                    • Cookie Token: {cookieToken ? '✅ Found' : '❌ Missing'}
-                </Typography>
-                <Typography variant="caption" display="block">
-                    • Is Authenticated: {isAuthenticated ? '✅ Yes' : '❌ No'}
-                </Typography>
+            <Box
+                sx={{
+                    minHeight: 'calc(100vh - 64px)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                <Typography variant="h6">Redirecting...</Typography>
             </Box>
         );
-    };
+    }
 
     return (
         <Box
@@ -315,7 +273,26 @@ const LoginPage = () => {
                             </Typography>
                         </Box>
 
-                        <DebugInfo />
+                        {/* Debug info for development */}
+                        {process.env.NODE_ENV === 'development' && (
+                            <Box sx={{ mt: 2, p: 2, bgcolor: '#f5f5f5', borderRadius: 1, width: '100%' }}>
+                                <Typography variant="caption" display="block">
+                                    Debug Info:
+                                </Typography>
+                                <Typography variant="caption" display="block">
+                                    • Is Authenticated: {isAuthenticated ? '✅ Yes' : '❌ No'}
+                                </Typography>
+                                <Typography variant="caption" display="block">
+                                    • Has User: {user ? '✅ Yes' : '❌ No'}
+                                </Typography>
+                                <Typography variant="caption" display="block">
+                                    • User Email: {user?.email || 'None'}
+                                </Typography>
+                                <Typography variant="caption" display="block">
+                                    • LocalStorage Token: {localStorage.getItem('token') ? '✅ Found' : '❌ Missing'}
+                                </Typography>
+                            </Box>
+                        )}
                     </Box>
                 </Paper>
             </Container>
