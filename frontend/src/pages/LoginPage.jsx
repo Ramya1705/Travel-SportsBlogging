@@ -1,4 +1,3 @@
-// src/pages/LoginPage.js
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
@@ -41,12 +40,6 @@ const LoginPage = () => {
 
     // MAIN REDIRECT LOGIC - Watch for authentication changes
     useEffect(() => {
-        console.log('🔍 Auth state check:', { 
-            isAuthenticated, 
-            hasUser: !!user, 
-            userEmail: user?.email 
-        });
-
         if (isAuthenticated && user) {
             console.log('✅ User is fully authenticated, redirecting to home');
             navigate('/', { replace: true });
@@ -108,7 +101,6 @@ const LoginPage = () => {
             if (result.success) {
                 console.log('✅ Login successful - result:', result);
                 // Don't navigate here - let the useEffect handle it
-                // The auth state should be updated immediately in the context
             } else {
                 console.error('❌ Login failed:', result.error);
                 setError(result.error);
@@ -132,7 +124,6 @@ const LoginPage = () => {
 
         console.log('Google Auth URL:', googleAuthUrl);
         
-        // Navigate to Google OAuth
         window.location.href = googleAuthUrl;
     };
 
